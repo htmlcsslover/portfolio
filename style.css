@@ -219,6 +219,7 @@ html {
 
 .profileText h1 {
   text-align: left;
+  margin-bottom: -30px;
 }
 
 .profileText .job-title {
@@ -255,26 +256,42 @@ html {
 }
 
 .aboutMeContainer #introductionP {
-  margin-bottom: 60px;
+  margin: 0 auto 60px auto; /* center block and bottom margin */
   max-width: 900px;
-  text-align: center;
+  text-align: center; /* center text inside the paragraph */
+  padding: 1rem;
 }
 
 #achievementSection {
-  display: grid;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* use flexbox */
+  flex-wrap: wrap; /* allow wrapping on smaller screens */
+  justify-content: space-between; /* space between left and right columns */
+  align-items: flex-start; /* align items to the top */
   margin: 80px 0;
+  gap: 30px; /* space between columns */
 }
 
 #achievementSection h2 {
-  margin-bottom: 20px;
+  width: 100%; /* full width for the title */
+  margin-bottom: 3rem;
+  text-align: center; /* center title above columns */
+}
+
+#achievementSection .left-column, #achievementSection .rght-column
+ {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column; /* stack heading and span vertically */
+  align-items: center; /* center everything inside the column */
+  gap: 30px;
 }
 
 #achievementSection span {
-  text-align: center;
-  max-width: 700px;
+  display: block;
+  margin-bottom: 20px;
+  text-align: center; /* center text inside the span */
+  max-width: 500px; /* optional: limit width for readability */
 }
 
 .skills-container {
@@ -317,74 +334,6 @@ html {
   margin-bottom: 10px;
   color: #a5a5a5;
   text-align: center;
-}
-
-/* ============================= */
-/* CONTACT ME SECTION */
-/* ============================= */
-
-.contactMeContainer {
-  display: grid;
-  place-items: center;
-  text-align: center;
-  width: 100%;
-  padding: 3rem 1rem;
-  background-color: #1b1d22;
-  gap: 2rem;
-}
-
-.contactMeContainer h1 {
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 1rem;
-}
-
-.contactMeContainer p {
-  font-size: 1rem;
-  color: #a5a5a5;
-  margin-bottom: 2rem;
-  max-width: 600px;
-}
-
-.contactForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  max-width: 600px;
-}
-
-.contactForm input,
-.contactForm textarea {
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  border: none;
-  font-size: 1rem;
-  background-color: #121216;
-  color: white;
-  resize: none;
-  margin-bottom: 1rem;
-}
-
-.contactForm input::placeholder,
-.contactForm textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.contactForm button {
-  background-color: #0062ff;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.contactForm button:hover {
-  background-color: #0062ff83;
 }
 
 /* ============================= */
