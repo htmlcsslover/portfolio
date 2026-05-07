@@ -1,76 +1,195 @@
 <!doctype html>
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Raphael - Portfolio</title>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Raphael - Portfolio</title>
 
-  <!-- Tailwind CSS CDN with plugins -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind CSS CDN with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
-    rel="stylesheet"
-  />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- AOS -->
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 
-  <!-- Your CSS last -->
-  <link href="style/index.css" rel="stylesheet" />
-</head>
+    <!-- Your CSS -->
+    <link href="style/index.css" rel="stylesheet" />
+
+    <!-- Responsive Overrides -->
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      @media (min-width: 425px) and (max-width: 1023px) {
+        .hero-title {
+          font-size: clamp(3rem, 11vw, 5rem);
+          line-height: 0.9;
+          letter-spacing: -0.045em;
+        }
+
+        [data-purpose="hero-content"] {
+          margin-top: 0.5rem;
+        }
+
+        [data-purpose="hero-portrait"] {
+          margin-bottom: 0.5rem;
+        }
+
+        [data-purpose="discovery-text"] .hero-title {
+          font-size: clamp(2rem, 6vw, 3.75rem);
+          line-height: 1.03;
+          letter-spacing: -0.035em;
+          margin-bottom: 2rem;
+        }
+
+        [data-purpose="discovery-text"] p {
+          font-size: 0.95rem;
+          line-height: 1.8;
+        }
+
+        section[data-purpose="education-timeline"] .flex,
+        section[data-purpose="experience-timeline"] .flex {
+          margin-bottom: 2rem;
+        }
+
+        section[data-purpose="education-timeline"]
+          .space-y-10
+          > :not([hidden])
+          ~ :not([hidden]),
+        section[data-purpose="experience-timeline"]
+          .space-y-10
+          > :not([hidden])
+          ~ :not([hidden]) {
+          margin-top: 2rem;
+        }
+      }
+
+      @media (min-width: 425px) and (max-width: 639px) {
+        .hero-gradient {
+          background: radial-gradient(
+            circle at 50% 28%,
+            rgba(219, 13, 127, 0.2) 8%,
+            rgba(255, 255, 255, 0.96) 48%,
+            rgba(255, 255, 255, 1) 100%
+          );
+        }
+
+        html.dark .hero-gradient {
+          background: radial-gradient(
+            circle at 50% 28%,
+            rgba(88, 28, 135, 0.38) 0%,
+            rgba(10, 10, 10, 1) 68%
+          );
+        }
+
+        .contact-btn {
+          width: 100%;
+          padding-block: 0.85rem;
+        }
+
+        footer .container {
+          text-align: center;
+        }
+      }
+
+      @media (min-width: 640px) and (max-width: 1023px) {
+        [data-purpose="hero-content"] {
+          max-width: 680px;
+        }
+
+        [data-purpose="discovery-text"] {
+          max-width: 760px;
+        }
+
+        [data-purpose="skills-grid"] > div {
+          padding-right: 0.5rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        [data-purpose="hero-content"] {
+          max-width: none;
+        }
+
+        [data-purpose="hero-portrait"] {
+          margin-bottom: 0;
+        }
+      }
+    </style>
+  </head>
+
   <body
     class="font-sans antialiased selection:bg-brand-purple/30 bg-white text-black"
   >
     <button
       id="theme-toggle"
-      class="fixed top-8 right-6 lg:right-[7.5rem] z-50 w-11 h-11 flex items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-lg hover:bg-white/10 transition-all duration-300"
+      class="fixed top-5 right-5 md:top-8 md:right-8 lg:right-[7.5rem] z-50 w-11 h-11 flex items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-lg hover:bg-white/10 transition-all duration-300"
     >
       🌙
     </button>
+
     <!-- BEGIN: Hero Section -->
     <section
-      class="relative min-h-screen hero-gradient flex flex-col justify-center pt-20 pb-32"
+      class="relative min-h-[100svh] hero-gradient flex flex-col justify-center pt-24 pb-20 md:pt-28 md:pb-24 lg:pt-20 lg:pb-32 overflow-hidden"
     >
       <div
-        class="container mx-auto px-6 lg:px-24 grid lg:grid-cols-[1.2fr_.8fr] items-center gap-[5%]"
+        class="container mx-auto px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 grid lg:grid-cols-[1.2fr_.8fr] items-center gap-10 md:gap-14 lg:gap-12 xl:gap-[5%]"
       >
         <!-- Hero Text Content -->
         <div
-          class="z-10 order-2 lg:order-1"
+          class="z-10 order-2 lg:order-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0"
           data-purpose="hero-content"
           data-aos="fade-right"
           data-aos-duration="1200"
         >
-          <div class="flex items-center gap-3 mb-6">
+          <div
+            class="flex items-center justify-center lg:justify-start gap-3 mb-5 md:mb-6"
+          >
             <span class="text-3xl">👋</span>
             <p class="font-medium italic">
               <span id="typing-text"></span>
               <span class="animate-pulse">|</span>
             </p>
           </div>
-          <h1 class="hero-title font-title font-extrabold tracking-tight mb-8">
+
+          <h1
+            class="hero-title font-title font-extrabold tracking-tight mb-6 md:mb-8"
+          >
             Design. Code.<br />
             <span class="text-brand-purple">Create</span>.
           </h1>
-          <div class="max-w-xl text-gray-400 space-y-1 mb-10 leading-relaxed">
+
+          <div
+            class="max-w-xl mx-auto lg:mx-0 text-gray-400 space-y-1 mb-8 md:mb-10 leading-relaxed text-sm sm:text-base"
+          >
             <p>BSIT-Mobile and Internet at National University Fairview •</p>
             <p>
               Cybersecurity elective • Information Officer at AWS Cloud Clubs
               Philippines
             </p>
           </div>
-          <div class="flex flex-wrap gap-[15%] items-center">
+
+          <div
+            class="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 items-stretch sm:items-center justify-center lg:justify-start"
+          >
             <a
               class="contact-btn w-full sm:w-auto text-center px-8 sm:px-10 py-3 text-sm font-semibold tracking-wide transition-all duration-300"
               href="mailto:contact@example.com"
             >
               Contact Me
             </a>
+
             <a
-              class="group flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors duration-300"
+              class="group flex items-center justify-center gap-2 text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors duration-300"
               href="https://www.linkedin.com/in/raphael-c-953821361/"
               target="_blank"
             >
@@ -79,6 +198,7 @@
               >
                 View my LinkedIn
               </span>
+
               <svg
                 fill="none"
                 height="16"
@@ -99,22 +219,21 @@
 
         <!-- Hero Image -->
         <div
-          class="order-1 lg:order-2 flex justify-center lg:justify-start lg:-ml-30 relative"
+          class="order-1 lg:order-2 flex justify-center lg:justify-start lg:-ml-6 xl:-ml-8 relative"
           data-purpose="hero-portrait"
           data-aos="fade-left"
           data-aos-duration="1200"
         >
           <div
-            class="relative w-[360px] h-[360px] rounded-[2rem] overflow-hidden bg-black"
+            class="relative w-[min(78vw,320px)] h-[min(78vw,320px)] md:w-[340px] md:h-[340px] lg:w-[360px] lg:h-[360px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-black"
           >
-            <!-- Static Portrait Only -->
             <img
               id="hero-image"
               src="images/lightMode.png"
               alt="Raphael Portrait"
               class="absolute inset-0 w-full h-full object-cover object-[center_-10%] scale-[1.51] opacity-100"
             />
-            <!-- ADD THIS INSIDE THE HERO IMAGE CONTAINER -->
+
             <video
               id="transition-video"
               class="absolute inset-0 w-full h-full object-cover object-[center_15%] scale-[1.16] opacity-0 pointer-events-none transition-opacity duration-300"
@@ -128,7 +247,7 @@
       <!-- Scroll Down Arrow -->
       <div
         id="scroll-arrow"
-        class="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-50 animate-bounce-slow transition-opacity duration-500"
+        class="absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 opacity-50 animate-bounce-slow transition-opacity duration-500"
       >
         <svg
           fill="none"
@@ -137,7 +256,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          viewbox="0 0 24 24"
+          viewBox="0 0 24 24"
           width="24"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -150,11 +269,11 @@
     <!-- BEGIN: Main Content Container -->
     <main
       id="main-content"
-      class="container mx-auto px-6 lg:px-24 py-24 main-hidden"
+      class="container mx-auto px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 py-16 md:py-20 lg:py-24 main-hidden"
     >
-      <div class="grid lg:grid-cols-12 gap-16 lg:gap-24">
+      <div class="grid lg:grid-cols-12 gap-14 md:gap-16 lg:gap-20 xl:gap-24">
         <!-- Left Column: Bio and Skills -->
-        <div class="lg:col-span-7 space-y-16">
+        <div class="lg:col-span-7 space-y-14 md:space-y-16">
           <!-- Discovery Section -->
           <section
             data-purpose="discovery-text"
@@ -163,22 +282,24 @@
             data-aos-delay="200"
           >
             <span
-              class="text-brand-purple uppercase tracking-[0.2em] text-xs font-bold mb-6 block"
+              class="text-brand-purple uppercase tracking-[0.2em] text-xs font-bold mb-5 md:mb-6 block"
               data-aos="fade-right"
               data-aos-duration="1200"
             >
               Discovery
             </span>
+
             <h2
-              class="text-4xl lg:text-5xl font-bold hero-title mb-10 leading-tight"
+              class="text-4xl lg:text-5xl font-bold hero-title mb-8 md:mb-10 leading-tight"
               data-aos="fade-right"
               data-aos-duration="1200"
               data-aos-delay="300"
             >
               What started as curiosity became a passion for creating.
             </h2>
+
             <div
-              class="text-gray-600 space-y-6 leading-relaxed max-w-2xl"
+              class="text-gray-600 space-y-5 md:space-y-6 leading-relaxed max-w-2xl"
               data-aos="fade-right"
               data-aos-duration="1200"
               data-aos-delay="600"
@@ -190,17 +311,20 @@
                 journey showed me how technology can open opportunities, build
                 communities, and create impact beyond just coding.
               </p>
+
               <p>
                 What drives my curiosity is simple — whenever something
                 genuinely interests me, I tend to hyperfixate and dive deep into
                 learning everything about it. That mindset helped me explore
                 different areas in tech and continuously push myself to improve.
               </p>
+
               <p>
                 Right now, I'm focused on exploring UI/UX design and leadership.
                 I enjoy understanding how design and user experience can make
                 digital products more meaningful and accessible.
               </p>
+
               <p>
                 As an Information Officer for AWS Cloud Clubs Philippines, I
                 also want to grow more as a leader by gaining experience in
@@ -214,7 +338,7 @@
 
           <!-- Skills Grid -->
           <section
-            class="grid grid-cols-1 md:grid-cols-3 gap-10"
+            class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10"
             data-purpose="skills-grid"
             data-aos="fade-up"
             data-aos-duration="1200"
@@ -228,6 +352,7 @@
                 <li>Photoshop</li>
               </ul>
             </div>
+
             <div>
               <h3 class="font-title font-bold mb-4 text-black">Development</h3>
               <ul class="text-gray-600 text-sm space-y-2">
@@ -238,6 +363,7 @@
                 <li>MySQL</li>
               </ul>
             </div>
+
             <div>
               <h3 class="font-title font-bold mb-4 text-black">Security</h3>
               <ul class="text-gray-600 text-sm space-y-2">
@@ -250,31 +376,36 @@
         </div>
 
         <!-- Right Column: Education and Experience -->
-        <div class="lg:col-span-5 space-y-16">
+        <div class="lg:col-span-5 space-y-14 md:space-y-16">
           <!-- Education Section -->
           <section
             data-purpose="education-timeline"
             data-aos="fade-down"
             data-aos-duration="1000"
           >
-            <div class="flex items-center gap-4 mb-12">
-              <div class="w-[2px] h-6 bg-brand-purple"></div>
+            <div class="flex items-center gap-4 mb-8 md:mb-12">
+              <div
+                class="w-[2px] h-6 bg-brand-purple timeline-heading-line"
+              ></div>
               <h2
                 class="font-title text-sm uppercase tracking-[0.22em] font-bold text-black"
               >
                 Education
               </h2>
             </div>
+
             <div
-              class="space-y-10 border-l border-black/15 pl-6"
+              class="timeline-list space-y-8 md:space-y-10 border-l pl-6"
               data-aos="fade-down"
               data-aos-duration="1200"
               data-aos-delay="300"
             >
               <div class="relative">
-                <span class="text-[10px] text-brand-purple font-bold block mb-2"
-                  >Present</span
+                <span
+                  class="text-[10px] text-brand-purple font-bold block mb-2"
                 >
+                  Present
+                </span>
                 <h4
                   class="font-title font-bold text-lg leading-tight text-black"
                 >
@@ -284,10 +415,13 @@
                   National University Fairview
                 </p>
               </div>
+
               <div class="relative">
-                <span class="text-[10px] text-brand-purple font-bold block mb-2"
-                  >Present</span
+                <span
+                  class="text-[10px] text-brand-purple font-bold block mb-2"
                 >
+                  Present
+                </span>
                 <h4
                   class="font-title font-bold text-lg leading-tight text-black"
                 >
@@ -306,24 +440,29 @@
             data-aos="fade-down"
             data-aos-duration="1000"
           >
-            <div class="flex items-center gap-4 mb-12">
-              <div class="w-[2px] h-6 bg-brand-purple"></div>
+            <div class="flex items-center gap-4 mb-8 md:mb-12">
+              <div
+                class="w-[2px] h-6 bg-brand-purple timeline-heading-line"
+              ></div>
               <h2
                 class="font-title text-sm uppercase tracking-[0.22em] font-bold text-black"
               >
                 Experience
               </h2>
             </div>
+
             <div
-              class="space-y-10 border-l border-black/15 pl-6"
+              class="timeline-list space-y-8 md:space-y-10 border-l pl-6"
               data-aos="fade-down"
               data-aos-duration="1200"
               data-aos-delay="300"
             >
               <div class="relative">
-                <span class="text-[10px] text-brand-purple font-bold block mb-2"
-                  >Present</span
+                <span
+                  class="text-[10px] text-brand-purple font-bold block mb-2"
                 >
+                  Present
+                </span>
                 <h4
                   class="font-title font-bold text-lg leading-tight text-black"
                 >
@@ -333,10 +472,11 @@
                   AWS Cloud Clubs Philippines
                 </p>
               </div>
+
               <div class="relative">
-                <span class="text-[10px] text-gray-500 font-medium block mb-2"
-                  >2022-2023</span
-                >
+                <span class="text-[10px] text-gray-500 font-medium block mb-2">
+                  2022-2023
+                </span>
                 <h4
                   class="font-title font-bold text-lg leading-tight text-black"
                 >
@@ -355,16 +495,17 @@
 
     <!-- BEGIN: Footer -->
     <footer
-      class="border-t border-black/10 py-12 px-6 lg:px-24"
+      class="border-t border-black/10 py-10 md:py-12 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24"
       data-purpose="main-footer"
     >
       <div
-        class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8"
+        class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8"
       >
         <div class="text-[11px] text-gray-500 tracking-widest uppercase">
           © 2026 RAPHAEL. ALL RIGHTS RESERVED.
         </div>
-        <div class="flex gap-8">
+
+        <div class="flex gap-6 md:gap-8">
           <a
             class="text-[11px] text-gray-500 hover:text-black tracking-widest uppercase transition-colors duration-300"
             href="https://github.com/htmlcsslover"
@@ -372,6 +513,7 @@
           >
             Github
           </a>
+
           <a
             class="text-[11px] text-gray-500 hover:text-black tracking-widest uppercase transition-colors duration-300"
             href="https://www.linkedin.com/in/raphael-c-953821361/"
@@ -383,10 +525,14 @@
       </div>
     </footer>
     <!-- END: Footer -->
+
+    <!-- AOS -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
-    AOS.init();
+      AOS.init();
     </script>
+
+    <!-- Your JS -->
     <script src="config/index.js"></script>
     <script src="config/lightDarkMode.js"></script>
   </body>

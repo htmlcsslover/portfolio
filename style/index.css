@@ -242,3 +242,111 @@ h6,
 .font-title {
   font-family: "Space Grotesk", sans-serif !important;
 }
+
+/* =========================================
+   RESPONSIVE OPTIMIZATION: 425px - 1024px
+========================================= */
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Mobile large to tablet */
+@media (min-width: 425px) and (max-width: 1023px) {
+  .hero-title {
+    font-size: clamp(3rem, 11vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+
+  [data-purpose="hero-content"] {
+    margin-top: 0.5rem;
+  }
+
+  [data-purpose="hero-portrait"] {
+    margin-bottom: 0.5rem;
+  }
+
+  [data-purpose="discovery-text"] .hero-title {
+    font-size: clamp(2rem, 6vw, 3.75rem);
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+    margin-bottom: 2rem;
+  }
+
+  [data-purpose="discovery-text"] p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  section[data-purpose="education-timeline"] .flex,
+  section[data-purpose="experience-timeline"] .flex {
+    margin-bottom: 2rem;
+  }
+
+  section[data-purpose="education-timeline"] .space-y-10 > :not([hidden]) ~ :not([hidden]),
+  section[data-purpose="experience-timeline"] .space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 2rem;
+  }
+}
+
+/* 425px - small mobile refinement */
+@media (min-width: 425px) and (max-width: 639px) {
+  .hero-gradient {
+    background: radial-gradient(
+      circle at 50% 28%,
+      rgba(219, 13, 127, 0.2) 8%,
+      rgba(255, 255, 255, 0.96) 48%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+
+  html.dark .hero-gradient {
+    background: radial-gradient(
+      circle at 50% 28%,
+      rgba(88, 28, 135, 0.38) 0%,
+      rgba(10, 10, 10, 1) 68%
+    );
+  }
+
+  .contact-btn {
+    width: 100%;
+    padding-block: 0.85rem;
+  }
+
+  main#main-content {
+    border-radius: 0;
+  }
+
+  footer [data-purpose="main-footer"],
+  footer .container {
+    text-align: center;
+  }
+}
+
+/* Tablet portrait and small laptop prep */
+@media (min-width: 640px) and (max-width: 1023px) {
+  [data-purpose="hero-content"] {
+    max-width: 680px;
+  }
+
+  [data-purpose="discovery-text"] {
+    max-width: 760px;
+  }
+
+  [data-purpose="skills-grid"] > div {
+    padding-right: 0.5rem;
+  }
+}
+
+/* Exact laptop transition: 1024px and up */
+@media (min-width: 1024px) {
+  [data-purpose="hero-content"] {
+    max-width: none;
+  }
+
+  [data-purpose="hero-portrait"] {
+    margin-bottom: 0;
+  }
+}
