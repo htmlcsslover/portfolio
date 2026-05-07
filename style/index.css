@@ -1,0 +1,218 @@
+/* =========================================
+   BASE STYLES
+========================================= */
+
+body {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+/* =========================================
+   HERO GRADIENT
+========================================= */
+
+.hero-gradient {
+  background: radial-gradient(
+    circle at 68% 50%,
+    rgba(249, 168, 212, 0.22) 0%,
+    rgba(255, 255, 255, 0.96) 45%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+/* =========================================
+   PORTRAIT MASK
+========================================= */
+
+.portrait-mask {
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+/* =========================================
+   HERO TITLE
+========================================= */
+
+.hero-title {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+/* =========================================
+   SCROLL ARROW ANIMATION
+========================================= */
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
+
+/* =========================================
+   FLOAT ANIMATION
+========================================= */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* =========================================
+   BRAND COLORS
+========================================= */
+
+/* Code. */
+h1 span.text-brand-purple {
+  color: #c911da !important;
+}
+
+/* Discovery */
+section[data-purpose="discovery-text"] > span {
+  color: #ff2bd6 !important;
+}
+
+/* Education / Experience Titles */
+section[data-purpose="education-timeline"] h2,
+section[data-purpose="experience-timeline"] h2 {
+  color: #ff2bd6 !important;
+}
+
+/* Timeline Bars */
+section[data-purpose="education-timeline"] .bg-brand-purple,
+section[data-purpose="experience-timeline"] .bg-brand-purple {
+  background-color: #ff2bd6 !important;
+}
+
+/* Present */
+section[data-purpose="education-timeline"] span,
+section[data-purpose="experience-timeline"] span {
+  color: #ff2bd6 !important;
+}
+
+/* Old Date */
+section[data-purpose="experience-timeline"] span.text-gray-500 {
+  color: rgb(107 114 128) !important;
+}
+
+/* =========================================
+   MAIN CONTENT ANIMATION
+========================================= */
+
+.main-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  pointer-events: none;
+}
+
+.main-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+main#main-content {
+  background-color: #ffffff;
+  color: #111111;
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+main#main-content h1,
+main#main-content h2,
+main#main-content h3,
+main#main-content h4,
+main#main-content h5,
+main#main-content h6 {
+  color: #111111;
+}
+
+main#main-content p,
+main#main-content li,
+main#main-content a {
+  color: rgb(75 85 99);
+}
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+html.dark body {
+  background-color: #0a0a0a;
+  color: white;
+}
+
+html.dark .hero-gradient {
+  background: radial-gradient(
+    circle at 68% 50%,
+    rgba(88, 28, 135, 0.4) 0%,
+    rgba(10, 10, 10, 1) 70%
+  );
+}
+
+html.dark main#main-content {
+  background-color: #0a0a0a;
+  color: white;
+}
+
+html.dark main#main-content h1,
+html.dark main#main-content h2,
+html.dark main#main-content h3,
+html.dark main#main-content h4,
+html.dark main#main-content h5,
+html.dark main#main-content h6 {
+  color: white;
+}
+
+html.dark main#main-content p,
+html.dark main#main-content li,
+html.dark main#main-content a {
+  color: rgb(156 163 175);
+}
+
+.contact-btn {
+  color: #111111 !important;
+  border: 1px solid rgba(17, 17, 17, 0.25);
+}
+
+.contact-btn:hover {
+  background-color: #111111;
+  color: #ffffff !important;
+}
+
+html.dark .contact-btn {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+html.dark .contact-btn:hover {
+  background-color: #ffffff;
+  color: #111111 !important;
+}
