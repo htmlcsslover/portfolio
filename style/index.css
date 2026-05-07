@@ -171,7 +171,7 @@ html.dark body {
 
 html.dark .hero-gradient {
   background: radial-gradient(
-    circle at 65% 46%,
+    circle at 66% 46%,
     rgba(88, 28, 135, 0.4) 0%,
     rgba(10, 10, 10, 1) 70%
   );
