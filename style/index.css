@@ -221,7 +221,18 @@ html.dark .contact-btn:hover {
    TYPOGRAPHY
 ========================================= */
 
-/* Titles / Headings */
+body,
+.font-sans {
+  font-family: "Manrope", sans-serif !important;
+}
+
+p,
+li,
+a,
+span {
+  font-family: "Manrope", sans-serif;
+}
+
 h1,
 h2,
 h3,
@@ -229,15 +240,5 @@ h4,
 h5,
 h6,
 .font-title {
-  font-family: "Space Grotesk", sans-serif;
-}
-
-/* Paragraphs / Description / Body */
-body,
-p,
-li,
-a,
-span,
-.font-sans {
-  font-family: "Manrope", sans-serif;
+  font-family: "Space Grotesk", sans-serif !important;
 }
