@@ -216,3 +216,28 @@ html.dark .contact-btn:hover {
   background-color: #ffffff;
   color: #111111 !important;
 }
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+
+/* Titles / Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-title {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* Paragraphs / Description / Body */
+body,
+p,
+li,
+a,
+span,
+.font-sans {
+  font-family: "Manrope", sans-serif;
+}
