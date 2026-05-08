@@ -285,8 +285,14 @@ body {
     margin-bottom: 2rem;
   }
 
-  section[data-purpose="education-timeline"] .space-y-10 > :not([hidden]) ~ :not([hidden]),
-  section[data-purpose="experience-timeline"] .space-y-10 > :not([hidden]) ~ :not([hidden]) {
+  section[data-purpose="education-timeline"]
+    .space-y-10
+    > :not([hidden])
+    ~ :not([hidden]),
+  section[data-purpose="experience-timeline"]
+    .space-y-10
+    > :not([hidden])
+    ~ :not([hidden]) {
     margin-top: 2rem;
   }
 }
@@ -295,18 +301,20 @@ body {
 @media (min-width: 425px) and (max-width: 639px) {
   .hero-gradient {
     background: radial-gradient(
-      circle at 50% 28%,
-      rgba(219, 13, 127, 0.2) 8%,
-      rgba(255, 255, 255, 0.96) 48%,
+      circle at 50% 32%,
+      rgba(219, 13, 127, 0.35) 8%,
+      rgba(219, 13, 127, 0.15) 25%,
+      rgba(255, 255, 255, 0.96) 52%,
       rgba(255, 255, 255, 1) 100%
     );
   }
 
   html.dark .hero-gradient {
     background: radial-gradient(
-      circle at 50% 28%,
-      rgba(88, 28, 135, 0.38) 0%,
-      rgba(10, 10, 10, 1) 68%
+      circle at 50% 32%,
+      rgba(88, 28, 135, 0.5) 0%,
+      rgba(88, 28, 135, 0.25) 20%,
+      rgba(10, 10, 10, 1) 65%
     );
   }
 
@@ -327,6 +335,25 @@ body {
 
 /* Tablet portrait and small laptop prep */
 @media (min-width: 640px) and (max-width: 1023px) {
+  .hero-gradient {
+    background: radial-gradient(
+      circle at 55% 35%,
+      rgba(219, 13, 127, 0.4) 5%,
+      rgba(219, 13, 127, 0.18) 22%,
+      rgba(255, 255, 255, 0.96) 50%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+
+  html.dark .hero-gradient {
+    background: radial-gradient(
+      circle at 55% 35%,
+      rgba(88, 28, 135, 0.55) 0%,
+      rgba(88, 28, 135, 0.28) 18%,
+      rgba(10, 10, 10, 1) 62%
+    );
+  }
+
   [data-purpose="hero-content"] {
     max-width: 680px;
   }

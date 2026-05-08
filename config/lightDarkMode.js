@@ -10,6 +10,9 @@ const LIGHT_IMAGE = "./images/lightMode.png";
 const LIGHT_VIDEO = "./images/wearShades.mp4";
 const DARK_VIDEO = "./images/removeShades.mp4";
 
+const LIGHT_VIDEO_SCALE = transitionVideo?.dataset.scaleLight || "1.16";
+const DARK_VIDEO_SCALE = transitionVideo?.dataset.scaleDark || "1.19";
+
 let isTransitioning = false;
 
 let isDarkMode =
@@ -84,6 +87,11 @@ function showVideo() {
   transitionVideo.classList.remove("opacity-0");
 
   transitionVideo.classList.add("opacity-100");
+
+  // Apply the correct scale for the current video
+  const isLight = transitionVideo.src.includes("wearShades");
+  const scale = isLight ? LIGHT_VIDEO_SCALE : DARK_VIDEO_SCALE;
+  transitionVideo.style.transform = `scale(${scale})`;
 }
 
 /* =========================================
@@ -236,13 +244,7 @@ function reverseVideo(targetDark) {
 
     if (currentTime <= 0) {
       transitionVideo.currentTime = 0;
-
-      clearInterval(rewindInterval);
-
-      rewindInterval = null;
-
       finishTheme(targetDark, runId);
-
       return;
     }
 
@@ -259,6 +261,13 @@ applyTheme(isDarkMode);
 transitionVideo.src = DARK_VIDEO;
 
 transitionVideo.preload = "auto";
+
+// Show main content immediately on initial load
+const mainContent = document.getElementById("main-content");
+if (mainContent) {
+  mainContent.classList.remove("main-hidden");
+  mainContent.classList.add("main-visible");
+}
 
 /* =========================================
    TOGGLE BUTTON
