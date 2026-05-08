@@ -1,310 +1,261 @@
-const toggleBtn = document.getElementById("theme-toggle");
-const html = document.documentElement;
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("theme-toggle");
+  const html = document.documentElement;
+  const heroImage = document.getElementById("hero-image");
+  const transitionVideo = document.getElementById("transition-video");
 
-const heroImage = document.getElementById("hero-image");
-const transitionVideo = document.getElementById("transition-video");
-
-const DARK_IMAGE = "./images/darkMode.png";
-const LIGHT_IMAGE = "./images/lightMode.png";
-
-const LIGHT_VIDEO = "./images/wearShades.mp4";
-const DARK_VIDEO = "./images/removeShades.mp4";
-
-const LIGHT_VIDEO_SCALE = transitionVideo?.dataset.scaleLight || "1.16";
-const DARK_VIDEO_SCALE = transitionVideo?.dataset.scaleDark || "1.19";
-
-let isTransitioning = false;
-
-let isDarkMode =
-  localStorage.getItem("theme") === "dark" ||
-  localStorage.getItem("theme") === null;
-
-let transitionOriginalDark = true;
-let transitionTargetDark = true;
-let transitionRunId = 0;
-
-let transitionDirection = 0;
-
-let playForwardRAF = null;
-let rewindInterval = null;
-
-/* =========================================
-   SAVE THEME
-========================================= */
-
-function saveTheme(dark) {
-  localStorage.setItem("theme", dark ? "dark" : "light");
-}
-
-/* =========================================
-   STOP PLAYBACK
-========================================= */
-
-function stopAllPlayback() {
-  if (playForwardRAF) cancelAnimationFrame(playForwardRAF);
-
-  if (rewindInterval) clearInterval(rewindInterval);
-
-  playForwardRAF = null;
-  rewindInterval = null;
-}
-
-/* =========================================
-   APPLY THEME
-========================================= */
-
-function applyTheme(dark) {
-  isDarkMode = dark;
-
-  saveTheme(dark);
-
-  if (dark) {
-    html.classList.add("dark");
-
-    toggleBtn.textContent = "☀️";
-
-    heroImage.src = DARK_IMAGE;
-  } else {
-    html.classList.remove("dark");
-
-    toggleBtn.textContent = "🌙";
-
-    heroImage.src = LIGHT_IMAGE;
+  if (!toggleBtn || !heroImage || !transitionVideo) {
+    return;
   }
 
-  html.classList.remove("theme-transitioning");
-}
+  const DARK_IMAGE = heroImage.dataset.darkSrc || "images/darkMode.png";
+  const LIGHT_IMAGE = heroImage.dataset.lightSrc || "images/lightMode.png";
+  const LIGHT_VIDEO =
+    transitionVideo.dataset.lightVideo || "images/wearShades.mp4";
+  const DARK_VIDEO =
+    transitionVideo.dataset.darkVideo || "images/removeShades.mp4";
 
-/* =========================================
-   VIDEO DISPLAY
-========================================= */
+  const LIGHT_VIDEO_SCALE = transitionVideo.dataset.scaleLight || "1.16";
+  const DARK_VIDEO_SCALE = transitionVideo.dataset.scaleDark || "1.19";
 
-function showVideo() {
-  heroImage.style.opacity = "0";
+  let isTransitioning = false;
+  let isDarkMode =
+    localStorage.getItem("theme") === "dark" ||
+    localStorage.getItem("theme") === null;
+  let transitionOriginalDark = true;
+  let transitionTargetDark = true;
+  let transitionRunId = 0;
+  let transitionDirection = 0;
+  let playForwardRAF = null;
+  let rewindInterval = null;
 
-  transitionVideo.style.display = "block";
+  function saveTheme(dark) {
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }
 
-  transitionVideo.classList.remove("opacity-0");
+  function updateToggleLabel(dark) {
+    toggleBtn.textContent = dark ? "Light Mode" : "Dark Mode";
+    toggleBtn.setAttribute(
+      "aria-label",
+      dark ? "Switch to light mode" : "Switch to dark mode",
+    );
+    toggleBtn.setAttribute("aria-busy", String(isTransitioning));
+  }
 
-  transitionVideo.classList.add("opacity-100");
+  function stopAllPlayback() {
+    if (playForwardRAF) cancelAnimationFrame(playForwardRAF);
+    if (rewindInterval) clearInterval(rewindInterval);
 
-  // Apply the correct scale for the current video
-  const isLight = transitionVideo.src.includes("wearShades");
-  const scale = isLight ? LIGHT_VIDEO_SCALE : DARK_VIDEO_SCALE;
-  transitionVideo.style.transform = `scale(${scale})`;
-}
+    playForwardRAF = null;
+    rewindInterval = null;
+  }
 
-/* =========================================
-   FINISH TRANSITION
-========================================= */
+  function applyTheme(dark) {
+    isDarkMode = dark;
+    saveTheme(dark);
+    html.classList.toggle("dark", dark);
+    heroImage.src = dark ? DARK_IMAGE : LIGHT_IMAGE;
+    applyImageCrop(dark);
+    updateToggleLabel(dark);
+    html.classList.remove("theme-transitioning");
+  }
 
-function finishTheme(dark, runId) {
-  if (runId !== transitionRunId) return;
+  function applyImageCrop(dark) {
+    const imageScale = dark
+      ? heroImage.dataset.darkScale || "1"
+      : heroImage.dataset.lightScale || "1";
 
-  stopAllPlayback();
+    const imagePosition = dark
+      ? heroImage.dataset.darkPosition || "center center"
+      : heroImage.dataset.lightPosition || "center center";
 
-  isTransitioning = false;
+    heroImage.style.transform = `scale(${imageScale})`;
+    heroImage.style.objectPosition = imagePosition;
+  }
 
-  transitionDirection = 0;
+  function showVideo() {
+    heroImage.style.opacity = "0";
+    heroImage.style.visibility = "hidden";
 
-  applyTheme(dark);
+    transitionVideo.style.display = "block";
+    transitionVideo.style.visibility = "visible";
+    transitionVideo.classList.add("is-active");
+    transitionVideo.style.opacity = "1";
 
-  heroImage.style.opacity = "1";
+    const isLightVideo = transitionVideo.src.includes("wearShades");
+    const scale = isLightVideo ? LIGHT_VIDEO_SCALE : DARK_VIDEO_SCALE;
+    transitionVideo.style.transform = `scale(${scale})`;
+  }
 
-  transitionVideo.classList.remove("opacity-100");
-
-  transitionVideo.classList.add("opacity-0");
-
-  setTimeout(() => {
-    transitionVideo.style.display = "none";
-  }, 300);
-
-  transitionVideo.pause();
-}
-
-/* =========================================
-   PLAY VIDEO FORWARD
-========================================= */
-
-function playVideoForward(
-  targetDark,
-  startProgress = 0,
-  originalDark = isDarkMode,
-) {
-  stopAllPlayback();
-
-  transitionRunId++;
-
-  const runId = transitionRunId;
-
-  isTransitioning = true;
-
-  transitionDirection = 1;
-
-  transitionOriginalDark = originalDark;
-
-  transitionTargetDark = targetDark;
-
-  const nextVideo = targetDark ? DARK_VIDEO : LIGHT_VIDEO;
-
-  showVideo();
-
-  transitionVideo.pause();
-
-  function startPlayback() {
+  function finishTheme(dark, runId) {
     if (runId !== transitionRunId) return;
 
-    const duration = transitionVideo.duration;
+    stopAllPlayback();
 
-    if (!duration || Number.isNaN(duration)) {
-      finishTheme(targetDark, runId);
+    const previousImageTransition = heroImage.style.transition;
+    const previousVideoTransition = transitionVideo.style.transition;
 
-      return;
-    }
+    isTransitioning = false;
+    transitionDirection = 0;
 
-    const safeProgress = Math.min(Math.max(startProgress, 0), 1);
+    applyTheme(dark);
 
-    transitionVideo.currentTime = duration * safeProgress;
+    heroImage.style.transition = "none";
+    transitionVideo.style.transition = "none";
 
-    transitionVideo.playbackRate = 1.5;
+    heroImage.style.visibility = "visible";
+    heroImage.style.opacity = "1";
 
-    const playPromise = transitionVideo.play();
+    transitionVideo.classList.remove("is-active");
+    transitionVideo.style.opacity = "0";
+    transitionVideo.style.visibility = "hidden";
+    transitionVideo.style.display = "none";
+    transitionVideo.pause();
 
-    if (playPromise) {
-      playPromise.catch(() => finishTheme(targetDark, runId));
-    }
+    requestAnimationFrame(() => {
+      heroImage.style.transition = previousImageTransition;
+      transitionVideo.style.transition = previousVideoTransition;
+    });
 
-    function checkVideo() {
+    updateToggleLabel(dark);
+  }
+
+  function playVideoForward(
+    targetDark,
+    startProgress = 0,
+    originalDark = isDarkMode,
+  ) {
+    stopAllPlayback();
+    transitionRunId += 1;
+
+    const runId = transitionRunId;
+    const nextVideo = targetDark ? DARK_VIDEO : LIGHT_VIDEO;
+
+    isTransitioning = true;
+    transitionDirection = 1;
+    transitionOriginalDark = originalDark;
+    transitionTargetDark = targetDark;
+    updateToggleLabel(isDarkMode);
+
+    showVideo();
+    transitionVideo.pause();
+
+    function startPlayback() {
       if (runId !== transitionRunId) return;
 
-      if (transitionVideo.currentTime >= duration - 0.05) {
-        finishTheme(targetDark, runId);
+      const duration = transitionVideo.duration;
 
+      if (!duration || Number.isNaN(duration)) {
+        finishTheme(targetDark, runId);
         return;
+      }
+
+      const safeProgress = Math.min(Math.max(startProgress, 0), 1);
+
+      transitionVideo.currentTime = duration * safeProgress;
+      transitionVideo.playbackRate = 1.5;
+
+      const playPromise = transitionVideo.play();
+
+      if (playPromise) {
+        playPromise.catch(() => finishTheme(targetDark, runId));
+      }
+
+      function checkVideo() {
+        if (runId !== transitionRunId) return;
+
+        if (transitionVideo.currentTime >= duration - 0.05) {
+          finishTheme(targetDark, runId);
+          return;
+        }
+
+        playForwardRAF = requestAnimationFrame(checkVideo);
       }
 
       playForwardRAF = requestAnimationFrame(checkVideo);
     }
 
-    playForwardRAF = requestAnimationFrame(checkVideo);
-  }
-
-  if (transitionVideo.getAttribute("src") !== nextVideo) {
-    transitionVideo.src = nextVideo;
-
-    transitionVideo.load();
-
-    transitionVideo.onloadedmetadata = startPlayback;
-  } else {
-    startPlayback();
-  }
-}
-
-/* =========================================
-   REVERSE VIDEO
-========================================= */
-
-function reverseVideo(targetDark) {
-  stopAllPlayback();
-
-  transitionRunId++;
-
-  const runId = transitionRunId;
-
-  isTransitioning = true;
-
-  transitionDirection = -1;
-
-  showVideo();
-
-  transitionVideo.pause();
-
-  transitionVideo.playbackRate = 1;
-
-  const duration = transitionVideo.duration;
-
-  if (!duration || Number.isNaN(duration)) {
-    finishTheme(targetDark, runId);
-
-    return;
-  }
-
-  let currentTime = transitionVideo.currentTime;
-
-  rewindInterval = setInterval(() => {
-    if (runId !== transitionRunId) {
-      clearInterval(rewindInterval);
-
-      rewindInterval = null;
-
-      return;
+    if (transitionVideo.getAttribute("src") !== nextVideo) {
+      transitionVideo.src = nextVideo;
+      transitionVideo.load();
+      transitionVideo.onloadedmetadata = startPlayback;
+    } else {
+      startPlayback();
     }
+  }
 
-    currentTime -= 0.04;
+  function reverseVideo(targetDark) {
+    stopAllPlayback();
+    transitionRunId += 1;
 
-    if (currentTime <= 0) {
-      transitionVideo.currentTime = 0;
+    const runId = transitionRunId;
+
+    isTransitioning = true;
+    transitionDirection = -1;
+
+    showVideo();
+    transitionVideo.pause();
+    transitionVideo.playbackRate = 1;
+
+    const duration = transitionVideo.duration;
+
+    if (!duration || Number.isNaN(duration)) {
       finishTheme(targetDark, runId);
       return;
     }
 
-    transitionVideo.currentTime = currentTime;
-  }, 30);
-}
+    let currentTime = transitionVideo.currentTime;
 
-/* =========================================
-   INITIAL THEME
-========================================= */
+    rewindInterval = window.setInterval(() => {
+      if (runId !== transitionRunId) {
+        clearInterval(rewindInterval);
+        rewindInterval = null;
+        return;
+      }
 
-applyTheme(isDarkMode);
+      currentTime -= 0.04;
 
-transitionVideo.src = DARK_VIDEO;
+      if (currentTime <= 0) {
+        transitionVideo.currentTime = 0;
+        finishTheme(targetDark, runId);
+        return;
+      }
 
-transitionVideo.preload = "auto";
+      transitionVideo.currentTime = currentTime;
+    }, 30);
+  }
 
-// Show main content immediately on initial load
-const mainContent = document.getElementById("main-content");
-if (mainContent) {
-  mainContent.classList.remove("main-hidden");
-  mainContent.classList.add("main-visible");
-}
+  applyTheme(isDarkMode);
 
-/* =========================================
-   TOGGLE BUTTON
-========================================= */
+  transitionVideo.src = DARK_VIDEO;
+  transitionVideo.preload = "auto";
+  transitionVideo.style.display = "none";
+  transitionVideo.style.visibility = "hidden";
 
-toggleBtn.addEventListener("click", () => {
-  html.classList.add("theme-transitioning");
+  toggleBtn.addEventListener("click", () => {
+    html.classList.add("theme-transitioning");
 
-  if (isTransitioning) {
-    if (transitionDirection === 1) {
-      const returnToDark = transitionOriginalDark;
+    if (isTransitioning) {
+      if (transitionDirection === 1) {
+        reverseVideo(transitionOriginalDark);
+      } else if (transitionDirection === -1) {
+        const duration = transitionVideo.duration || 1;
+        const currentProgress = transitionVideo.currentTime / duration;
 
-      reverseVideo(returnToDark);
-    } else if (transitionDirection === -1) {
-      const targetDark = transitionTargetDark;
+        playVideoForward(
+          transitionTargetDark,
+          currentProgress,
+          transitionOriginalDark,
+        );
+      }
 
-      const duration = transitionVideo.duration || 1;
-
-      const currentProgress = transitionVideo.currentTime / duration;
-
-      playVideoForward(targetDark, currentProgress, transitionOriginalDark);
+      return;
     }
 
-    return;
-  }
+    const originalDark = isDarkMode;
+    const targetDark = !isDarkMode;
 
-  const originalDark = isDarkMode;
-
-  if (isDarkMode) {
-    applyTheme(false);
-
-    playVideoForward(false, 0, originalDark);
-
-    return;
-  }
-
-  applyTheme(true);
-
-  playVideoForward(true, 0, originalDark);
+    applyTheme(targetDark);
+    playVideoForward(targetDark, 0, originalDark);
+  });
 });
