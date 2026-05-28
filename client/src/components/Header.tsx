@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { scrollToElement } from "../utils/smoothScroll";
 
 interface HeaderProps {
   activeSection: string;
@@ -21,11 +22,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvas
     e.preventDefault();
     const target = document.getElementById(id);
     if (target) {
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      target.scrollIntoView({
-        behavior: reducedMotion ? "auto" : "smooth",
-        block: "start"
-      });
+      scrollToElement(target);
       setMobileOpen(false);
     }
   };

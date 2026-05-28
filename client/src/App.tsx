@@ -146,9 +146,9 @@ const AppContent: React.FC = () => {
     const heroObserver = new IntersectionObserver(
       ([entry]) => {
         if (reducedMotion) {
-          setShowArrow(false);
+          setShowArrow((current) => (current ? false : current));
         } else {
-          setShowArrow(entry.isIntersecting);
+          setShowArrow((current) => (current === entry.isIntersecting ? current : entry.isIntersecting));
         }
       },
       { threshold: 0.1 }
@@ -187,9 +187,11 @@ const AppContent: React.FC = () => {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
         if (intersecting.length > 0) {
-          setActiveSection(intersecting[0].target.id);
+          setActiveSection((current) =>
+            current === intersecting[0].target.id ? current : intersecting[0].target.id
+          );
         } else if (window.scrollY < 200) {
-          setActiveSection("home");
+          setActiveSection((current) => (current === "home" ? current : "home"));
         }
       },
       {

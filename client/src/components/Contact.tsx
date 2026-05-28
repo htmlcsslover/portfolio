@@ -23,15 +23,15 @@ export const Contact: React.FC<ContactProps> = React.memo(({ data, socials }) =>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
-              className="cta-primary magnetic focus-ring px-6 py-3 text-sm font-semibold"
+              className="cta-primary focus-ring px-6 py-3 text-sm font-semibold"
               href={socials.linkedin}
               target="_blank"
               rel="noreferrer"
             >
-              Connect on LinkedIn
+              LinkedIn
             </a>
             <a
-              className="cta-secondary magnetic focus-ring px-6 py-3 text-sm font-semibold"
+              className="cta-secondary focus-ring px-6 py-3 text-sm font-semibold"
               href={socials.github}
               target="_blank"
               rel="noreferrer"

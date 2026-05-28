@@ -1,10 +1,6 @@
 {
   "hero": {
-    "badges": [
-      "NU Fairview",
-      "UI/UX Explorer",
-      "AWS Cloud Clubs PH"
-    ],
+    "badges": ["NU Fairview", "UI/UX Explorer", "AWS Cloud Clubs PH"],
     "typingPhrases": [
       "Hi, I am Raphael.",
       "I design thoughtful interfaces.",
@@ -41,37 +37,19 @@
     "categories": [
       {
         "name": "Frontend",
-        "items": [
-          "HTML",
-          "CSS",
-          "Tailwind CSS",
-          "JavaScript",
-          "React.js"
-        ]
+        "items": ["HTML", "CSS", "Tailwind CSS", "JavaScript", "React.js"]
       },
       {
         "name": "Backend",
-        "items": [
-          "Node.js",
-          "Express.js",
-          "REST APIs",
-          "PHP"
-        ]
+        "items": ["Node.js", "Express.js", "REST APIs", "PHP"]
       },
       {
         "name": "Database",
-        "items": [
-          "Supabase",
-          "MySQL"
-        ]
+        "items": ["Supabase", "MySQL"]
       },
       {
         "name": "Design",
-        "items": [
-          "Figma",
-          "Wireframing",
-          "Prototyping"
-        ]
+        "items": ["Figma", "Wireframing", "Prototyping"]
       },
       {
         "name": "Security",
@@ -120,7 +98,7 @@
       "items": [
         {
           "period": "Present",
-          "title": "Information Officer",
+          "title": "Information Officer | Volunteer",
           "subtitle": "AWS Cloud Clubs Philippines"
         },
         {
