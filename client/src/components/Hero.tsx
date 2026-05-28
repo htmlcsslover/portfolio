@@ -178,8 +178,8 @@ export const Hero: React.FC<HeroProps> = React.memo(
                   ref={canvasRef}
                   data-frame-light-scale="1"
                   data-frame-dark-scale="1"
-                  data-frame-light-position="center 14%"
-                  data-frame-dark-position="center 14.5%"
+                  data-frame-light-position="center 14.7%"
+                  data-frame-dark-position="center 14.3%"
                   className="absolute inset-0 w-full h-full opacity-0 pointer-events-none object-cover"
                   style={{ visibility: "hidden" }}
                 />

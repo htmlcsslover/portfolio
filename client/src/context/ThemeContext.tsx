@@ -30,6 +30,8 @@ const FRAME_PATH = (i: number) => {
 /** Target timeline rate for the canvas animation. 60fps = ~16.6 ms per frame. */
 const FPS = 60;
 const MS_PER_FRAME = 1000 / FPS;
+const STATIC_IMAGE_REVEAL_PROGRESS = 1;
+const CANVAS_FADE_DURATION_MS = 220;
 
 // ---------------------------------------------------------------------------
 // Context
@@ -70,8 +72,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const currentFrameRef = useRef<number>(1);
   /** requestAnimationFrame id so we can cancel it. */
   const rafIdRef = useRef<number | null>(null);
+  /** requestAnimationFrame ids for delaying canvas fade until after image paint. */
+  const canvasFadeFrameRef = useRef<number | null>(null);
+  const canvasFadeSecondFrameRef = useRef<number | null>(null);
   /** Whether the canvas animation loop is currently running. */
   const isAnimatingRef = useRef<boolean>(false);
+  /** Prevents repeated portrait swaps during a single transition. */
+  const portraitSwapDoneRef = useRef<boolean>(false);
+  /** Timeout id for hiding the canvas after its fade. */
+  const canvasHideTimeoutRef = useRef<number | null>(null);
   /** Timestamp where the current transition timeline started. */
   const animationStartTimeRef = useRef<number>(0);
   /** Frame index where the current transition timeline started. */
@@ -175,19 +184,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     return () => {
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      if (canvasFadeFrameRef.current) cancelAnimationFrame(canvasFadeFrameRef.current);
+      if (canvasFadeSecondFrameRef.current) cancelAnimationFrame(canvasFadeSecondFrameRef.current);
+      if (canvasHideTimeoutRef.current) window.clearTimeout(canvasHideTimeoutRef.current);
     };
   }, []);
 
   // =========================================================================
   // drawFrame — render one frame to the canvas
   // =========================================================================
-  const drawFrame = (
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement,
-    heroImage: HTMLImageElement,
-    index: number,
-    targetDark: boolean
-  ) => {
+  const getLoadedFrame = (index: number) => {
     // Clamp index to valid range
     const clampedIndex = Math.max(1, Math.min(TOTAL_FRAMES, index));
 
@@ -198,8 +204,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       fallbackIdx--;
       img = framesRef.current[fallbackIdx];
     }
-    if (!img) return;
+    return img;
+  };
 
+  const drawImageFrame = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    heroImage: HTMLImageElement,
+    img: HTMLImageElement,
+    targetDark: boolean
+  ) => {
     // Read scale/position from canvas data attributes (set in Hero.tsx)
     const scale = targetDark
       ? parseFloat(canvas.dataset.frameDarkScale || heroImage.dataset.darkScale || "1")
@@ -235,8 +249,37 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       dy = (canvas.height - drawHeight) * (parseFloat(yPos) / 100);
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, dx, dy, drawWidth, drawHeight);
+  };
+
+  const drawFrame = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    heroImage: HTMLImageElement,
+    framePosition: number,
+    targetDark: boolean
+  ) => {
+    const clampedPosition = Math.max(1, Math.min(TOTAL_FRAMES, framePosition));
+    const lowerIndex = Math.floor(clampedPosition);
+    const upperIndex = Math.min(TOTAL_FRAMES, lowerIndex + 1);
+    const blendAmount = clampedPosition - lowerIndex;
+    const lowerFrame = getLoadedFrame(lowerIndex);
+    const upperFrame = getLoadedFrame(upperIndex);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (!lowerFrame && !upperFrame) return;
+
+    ctx.globalAlpha = 1;
+    if (lowerFrame) {
+      drawImageFrame(ctx, canvas, heroImage, lowerFrame, targetDark);
+    }
+
+    if (upperFrame && upperFrame !== lowerFrame && blendAmount > 0) {
+      ctx.globalAlpha = blendAmount;
+      drawImageFrame(ctx, canvas, heroImage, upperFrame, targetDark);
+      ctx.globalAlpha = 1;
+    }
   };
 
   // =========================================================================
@@ -249,13 +292,43 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     heroImage: HTMLImageElement,
     targetDark: boolean
   ) => {
+    const revealStaticPortraitThenFadeCanvas = () => {
+      if (portraitSwapDoneRef.current) return;
+
+      portraitSwapDoneRef.current = true;
+      setPortraitIsDark(targetDark);
+      heroImage.style.visibility = "visible";
+      heroImage.style.opacity = "1";
+
+      canvasFadeFrameRef.current = requestAnimationFrame(() => {
+        canvasFadeFrameRef.current = null;
+        canvasFadeSecondFrameRef.current = requestAnimationFrame(() => {
+          canvasFadeSecondFrameRef.current = null;
+          canvas.style.opacity = "0";
+        });
+      });
+    };
+
     // Cancel any running animation before starting a new one
     if (rafIdRef.current !== null) {
       cancelAnimationFrame(rafIdRef.current);
       rafIdRef.current = null;
     }
+    if (canvasFadeFrameRef.current !== null) {
+      cancelAnimationFrame(canvasFadeFrameRef.current);
+      canvasFadeFrameRef.current = null;
+    }
+    if (canvasFadeSecondFrameRef.current !== null) {
+      cancelAnimationFrame(canvasFadeSecondFrameRef.current);
+      canvasFadeSecondFrameRef.current = null;
+    }
+    if (canvasHideTimeoutRef.current !== null) {
+      window.clearTimeout(canvasHideTimeoutRef.current);
+      canvasHideTimeoutRef.current = null;
+    }
 
     isAnimatingRef.current = true;
+    portraitSwapDoneRef.current = false;
     animationStartTimeRef.current = 0;
     animationStartFrameRef.current = currentFrameRef.current;
 
@@ -279,20 +352,28 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         Math.min(TOTAL_FRAMES, Math.round(framePosition))
       );
 
-      drawFrame(ctx, canvas, heroImage, currentFrameRef.current, targetDark);
+      drawFrame(ctx, canvas, heroImage, framePosition, targetDark);
 
-      if (progress < 1) {
+      const isTransitionComplete = progress >= STATIC_IMAGE_REVEAL_PROGRESS;
+
+      if (!portraitSwapDoneRef.current && isTransitionComplete) {
+        revealStaticPortraitThenFadeCanvas();
+      }
+
+      if (!isTransitionComplete) {
         rafIdRef.current = requestAnimationFrame(loop);
       } else {
-        // Animation complete — start canvas fade and swap portrait simultaneously
+        // Animation complete; swap the static portrait after the final canvas frame.
         currentFrameRef.current = endFrame;
-        setPortraitIsDark(targetDark); // swap static image now, crossfades with canvas fade-out
-        canvas.style.opacity = "0";
-        setTimeout(() => {
+        if (!portraitSwapDoneRef.current) {
+          revealStaticPortraitThenFadeCanvas();
+        }
+        canvasHideTimeoutRef.current = window.setTimeout(() => {
           canvas.style.visibility = "hidden";
           isAnimatingRef.current = false;
           rafIdRef.current = null;
-        }, 200);
+          canvasHideTimeoutRef.current = null;
+        }, CANVAS_FADE_DURATION_MS);
       }
     };
 
@@ -343,7 +424,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Make canvas visible as overlay
     canvas.style.visibility = "visible";
     canvas.style.opacity = "1";
-    canvas.style.transition = "opacity 200ms ease";
+    canvas.style.transition = `opacity ${CANVAS_FADE_DURATION_MS}ms ease`;
 
     // Draw the first frame immediately (no blank flash)
     drawFrame(ctx, canvas, heroImage, currentFrameRef.current, targetDark);

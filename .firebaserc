@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "raphaeldev"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "rphlclsdev"
+  }
 }

@@ -69,7 +69,19 @@ const FALLBACK_DATA: PortfolioData = {
       },
       {
         name: "Tools",
-        items: ["Git", "GitHub", "VS Code"]
+        items: [
+          "Git",
+          "GitHub",
+          "VS Code",
+          "Codex",
+          "Antigravity",
+          "Claude",
+          "ChatGPT",
+          "Gemini",
+          "Cursor",
+          "Kiro AI",
+          "Windsurf"
+        ]
       }
     ]
   },
@@ -94,7 +106,7 @@ const FALLBACK_DATA: PortfolioData = {
       items: [
         {
           period: "Present",
-          title: "Information Officer",
+          title: "Information Officer | Volunteer",
           subtitle: "AWS Cloud Clubs Philippines"
         },
         {
@@ -113,7 +125,7 @@ const FALLBACK_DATA: PortfolioData = {
 };
 
 const AppContent: React.FC = () => {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData>(FALLBACK_DATA);
+  const portfolioData = FALLBACK_DATA;
   const [activeSection, setActiveSection] = useState("home");
   
   const [showArrow, setShowArrow] = useState(true);
@@ -121,21 +133,6 @@ const AppContent: React.FC = () => {
   // Refs for theme transitions
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroImageRef = useRef<HTMLImageElement>(null);
-
-  // Fetch portfolio data from Express server
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/portfolio");
-        if (!response.ok) throw new Error("Server returned non-ok status");
-        const json = await response.json();
-        setPortfolioData(json);
-      } catch (error) {
-        console.warn("Express backend offline, falling back to static mock data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   // Scroll animations and arrow display observers
   useEffect(() => {
