@@ -1,0 +1,139 @@
+{
+  "hero": {
+    "badges": [
+      "NU Fairview",
+      "UI/UX Explorer",
+      "AWS Cloud Clubs PH"
+    ],
+    "typingPhrases": [
+      "Hi, I am Raphael.",
+      "I design thoughtful interfaces.",
+      "I build, learn, and lead."
+    ],
+    "title": {
+      "line1": "Design.",
+      "line2": "Code.",
+      "highlight": "Create."
+    },
+    "description": [
+      "BSIT-Mobile and Internet student at National University Fairview. Cybersecurity elective."
+    ],
+    "currentLane": "Frontend + UI/UX",
+    "socialLinks": {
+      "linkedin": "https://www.linkedin.com/in/raphael-c-953821361/",
+      "github": "https://github.com/htmlcsslover",
+      "email": "mailto:contact@example.com"
+    }
+  },
+  "discovery": {
+    "kicker": "Discovery",
+    "title": "What started as curiosity became a passion for creating.",
+    "paragraphs": [
+      "I got into tech through the people around me. Seeing my friends grow from students into professionals and even influencers in the tech industry inspired me to explore the field myself. Their journey showed me how technology can open opportunities, build communities, and create impact beyond just coding.",
+      "What drives my curiosity is simple: whenever something genuinely interests me, I tend to hyperfixate and dive deep into learning everything about it. That mindset helped me explore different areas in tech and continuously push myself to improve.",
+      "Right now, I am focused on exploring UI/UX design and leadership. I enjoy understanding how design and user experience can make digital products more meaningful and accessible.",
+      "As an Information Officer for AWS Cloud Clubs Philippines, I also want to grow more as a leader by gaining experience in communication, collaboration, and community building."
+    ]
+  },
+  "skills": {
+    "kicker": "Skills",
+    "title": "Tools I keep sharpening.",
+    "categories": [
+      {
+        "name": "Frontend",
+        "items": [
+          "HTML",
+          "CSS",
+          "Tailwind CSS",
+          "JavaScript",
+          "React.js"
+        ]
+      },
+      {
+        "name": "Backend",
+        "items": [
+          "Node.js",
+          "Express.js",
+          "REST APIs",
+          "PHP"
+        ]
+      },
+      {
+        "name": "Database",
+        "items": [
+          "Supabase",
+          "MySQL"
+        ]
+      },
+      {
+        "name": "Design",
+        "items": [
+          "Figma",
+          "Wireframing",
+          "Prototyping"
+        ]
+      },
+      {
+        "name": "Security",
+        "items": [
+          "Cybersecurity Fundamentals",
+          "Ethical Hacking Basics",
+          "Risk Awareness"
+        ]
+      },
+      {
+        "name": "Tools",
+        "items": [
+          "Git",
+          "GitHub",
+          "VS Code",
+          "Codex",
+          "Antigravity",
+          "Claude",
+          "ChatGPT",
+          "Gemini",
+          "Cursor",
+          "Kiro AI",
+          "Windsurf"
+        ]
+      }
+    ]
+  },
+  "journey": {
+    "education": {
+      "kicker": "Education",
+      "items": [
+        {
+          "period": "2024-Present",
+          "title": "BS Information Technology - Mobile & Internet",
+          "subtitle": "National University Fairview"
+        },
+        {
+          "period": "2022-2024",
+          "title": "BS Information Technology",
+          "subtitle": "AMA Computer College"
+        }
+      ]
+    },
+    "experience": {
+      "kicker": "Experience",
+      "items": [
+        {
+          "period": "Present",
+          "title": "Information Officer",
+          "subtitle": "AWS Cloud Clubs Philippines"
+        },
+        {
+          "period": "2022-2023",
+          "title": "Customer Service Representative",
+          "subtitle": "Teleperformance"
+        }
+      ]
+    }
+  },
+  "contact": {
+    "kicker": "Connect",
+    "title": "Let's connect.",
+    "description": "I am always open to new opportunities, collaborations, or just talking about tech. The best way to reach out to me is through LinkedIn!"
+  }
+}

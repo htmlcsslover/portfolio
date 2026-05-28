@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Raphael portfolio - UI/UX, development, cybersecurity, and community leadership."
+    />
+    <title>Raphael - Portfolio</title>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme");
+      document.documentElement.classList.toggle("dark", savedTheme !== "light");
+    </script>
+
+    <link href="./dist/styles.css" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                pink: "#ff2bd6",
+                purple: "#8b5cf6",
+                cyan: "#67e8f9",
+                ink: "#070711",
+              },
+            },
+            fontFamily: {
+              sans: ["Manrope", "sans-serif"],
+              title: ["Space Grotesk", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="src/css/custom.css" rel="stylesheet" />
+  </head>
+
+  <body
+    class="min-h-screen overflow-x-hidden bg-brand-ink font-sans text-white antialiased"
+  >
+    <div class="site-bg" aria-hidden="true"></div>
+
+    <!-- Minimal Navigation -->
+    <header class="fixed inset-x-0 top-4 z-50 px-4 sm:top-6">
+      <nav
+        class="glass-panel mx-auto flex max-w-6xl items-center justify-between gap-8 rounded-full px-3 py-3 sm:px-4"
+        aria-label="Primary navigation"
+      >
+        <a href="#home" class="brand-mark focus-ring" aria-label="Raphael home"
+          >R</a
+        >
+
+        <div class="hidden items-center gap-10 md:flex">
+          <a class="nav-link" href="#discovery">Discovery</a>
+          <a class="nav-link" href="#journey">Education & Experience</a>
+          <a class="nav-link" href="#contact">Contact</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="mobile-nav-toggle"
+            class="menu-button focus-ring md:hidden"
+            type="button"
+            aria-controls="mobile-nav"
+            aria-expanded="false"
+            aria-label="Open navigation menu"
+          >
+            <span aria-hidden="true"></span>
+          </button>
+          <button
+            id="theme-toggle"
+            class="theme-toggle focus-ring"
+            type="button"
+            aria-label="Switch to light mode"
+          >
+            Light Mode
+          </button>
+        </div>
+      </nav>
+
+      <div id="mobile-nav" class="mx-auto mt-3 hidden max-w-6xl md:hidden">
+        <div class="glass-panel rounded-[1.5rem] p-2">
+          <a class="mobile-nav-link" href="#discovery">Discovery</a>
+          <a class="mobile-nav-link" href="#journey">Education & Experience</a>
+          <a class="mobile-nav-link" href="#contact">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section
+        id="home"
+        class="relative min-h-screen px-4 pb-16 pt-32 sm:px-6 lg:px-8"
+      >
+        <div
+          class="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]"
+        >
+          <article
+            class="hero-glass glass-panel reveal tilt-card relative rounded-[2rem] p-6 sm:p-8 lg:p-10"
+          >
+            <div class="mb-6 flex flex-wrap items-center gap-3">
+              <span class="glass-chip">NU Fairview</span>
+              <span class="glass-chip">UI/UX Explorer</span>
+              <span class="glass-chip">AWS Cloud Clubs PH</span>
+            </div>
+
+            <p
+              class="mb-4 min-h-7 text-sm font-semibold italic text-white/70 sm:text-base"
+            >
+              <span id="typing-text"></span><span class="typing-cursor">|</span>
+            </p>
+
+            <h1
+              class="font-title text-[clamp(3.4rem,10vw,7.8rem)] font-extrabold leading-[0.86] tracking-tight"
+            >
+              Design.<br />
+              Code.<br />
+              <span class="liquid-text">Create.</span>
+            </h1>
+
+            <div
+              class="mt-7 max-w-2xl space-y-2 text-sm leading-7 text-white/70 sm:text-base"
+            >
+              <p>BSIT-Mobile and Internet at National University Fairview.</p>
+              <p>
+                Cybersecurity elective. Information Officer at AWS Cloud Clubs
+                Philippines.
+              </p>
+            </div>
+            <div
+              class="action-row glass-panel mt-8 flex w-full flex-wrap items-center justify-evenly gap-6 rounded-[1.6rem] p-3 sm:gap-8"
+            >
+              <a class="cta-primary magnetic focus-ring" href="#contact"
+                >Contact Me</a
+              >
+              <a
+                class="cta-secondary magnetic focus-ring"
+                href="https://www.linkedin.com/in/raphael-c-953821361/"
+                target="_blank"
+                rel="noreferrer"
+                >LinkedIn</a
+              >
+              <a
+                class="cta-secondary magnetic focus-ring"
+                href="https://github.com/htmlcsslover"
+                target="_blank"
+                rel="noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </article>
+
+          <aside
+            class="reveal relative mx-auto w-full max-w-[25rem] lg:max-w-none"
+          >
+            <div
+              class="portrait-shell glass-panel tilt-card relative mx-auto aspect-[0.92] rounded-[2rem] p-3"
+            >
+              <div class="portrait-media">
+                <!--
+  Manual portrait tuning:
+  - Adjust image zoom with data-light-scale and data-dark-scale
+  - Adjust image crop with data-light-position and data-dark-position
+  - Adjust video crop with the video class: object-[center_15%]
+  - Adjust video zoom per theme with data-scale-light and data-scale-dark
+-->
+                <img
+                  id="hero-image"
+                  src="images/lightMode.png"
+                  data-dark-src="images/darkMode.png"
+                  data-light-src="images/lightMode.png"
+                  data-light-scale="1.335"
+                  data-dark-scale="1.335"
+                  data-light-position="center -25%"
+                  data-dark-position="center -25%"
+                  alt="Raphael Portrait"
+                  class="absolute inset-0 w-full h-full object-cover opacity-100"
+                />
+
+                <canvas
+                  id="transition-canvas"
+                  data-frame-light-scale="1"
+                  data-frame-dark-scale="1"
+                  data-frame-light-position="center 15%"
+                  data-frame-dark-position="center 15%"
+                  class="absolute inset-0 w-full h-full opacity-0 pointer-events-none object-cover"
+                ></canvas>
+              </div>
+              <div class="portrait-shine" aria-hidden="true"></div>
+            </div>
+
+            <div
+              class="current-lane-badge glass-panel rounded-3xl p-4 text-center"
+            >
+              <p class="text-xs uppercase tracking-[0.35em] text-white/50">
+                Current lane
+              </p>
+              <p class="mt-1 font-title text-xl font-bold">
+                UI/UX + Leadership
+              </p>
+            </div>
+          </aside>
+        </div>
+
+        <button
+          id="scroll-arrow"
+          class="scroll-arrow focus-ring"
+          type="button"
+          aria-label="Scroll to Discovery"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="m6 9 6 6 6-6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </section>
+
+      <div id="main-content" class="main-hidden">
+        <!-- Discovery -->
+        <section
+          id="discovery"
+          class="section-shell px-4 py-10 sm:px-6 lg:px-8"
+        >
+          <div class="mx-auto max-w-6xl">
+            <article
+              class="glass-panel reveal reveal-left tilt-card rounded-[2rem] p-6 sm:p-8 lg:p-10"
+            >
+              <span class="section-kicker">Discovery</span>
+              <h2 class="section-title max-w-4xl">
+                What started as curiosity became a passion for creating.
+              </h2>
+              <div
+                class="mt-8 grid gap-5 text-sm leading-7 text-white/70 md:grid-cols-2 md:text-base"
+              >
+                <p>
+                  I got into tech through the people around me. Seeing my
+                  friends grow from students into professionals and even
+                  influencers in the tech industry inspired me to explore the
+                  field myself. Their journey showed me how technology can open
+                  opportunities, build communities, and create impact beyond
+                  just coding.
+                </p>
+                <p>
+                  What drives my curiosity is simple: whenever something
+                  genuinely interests me, I tend to hyperfixate and dive deep
+                  into learning everything about it. That mindset helped me
+                  explore different areas in tech and continuously push myself
+                  to improve.
+                </p>
+                <p>
+                  Right now, I am focused on exploring UI/UX design and
+                  leadership. I enjoy understanding how design and user
+                  experience can make digital products more meaningful and
+                  accessible.
+                </p>
+                <p>
+                  As an Information Officer for AWS Cloud Clubs Philippines, I
+                  also want to grow more as a leader by gaining experience in
+                  communication, collaboration, and community building.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills" class="section-shell px-4 py-10 sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-6xl">
+            <div class="mb-6 reveal reveal-left">
+              <span class="section-kicker">Skills</span>
+              <h2 class="section-title">Tools I keep sharpening.</h2>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-3">
+              <article
+                class="skill-card glass-panel reveal reveal-right tilt-card rounded-[2rem] p-6"
+              >
+                <h3 class="font-title text-2xl font-bold">Design</h3>
+                <ul class="mt-5 flex flex-wrap gap-2 text-sm text-white/70">
+                  <li class="glass-chip">Wireframing</li>
+                  <li class="glass-chip">Prototyping</li>
+                  <li class="glass-chip">Figma</li>
+                  <li class="glass-chip">Photoshop</li>
+                </ul>
+              </article>
+
+              <article
+                class="skill-card glass-panel reveal reveal-right reveal-delay-1 tilt-card rounded-[2rem] p-6"
+              >
+                <h3 class="font-title text-2xl font-bold">Development</h3>
+                <ul class="mt-5 flex flex-wrap gap-2 text-sm text-white/70">
+                  <li class="glass-chip">HTML</li>
+                  <li class="glass-chip">CSS</li>
+                  <li class="glass-chip">Tailwind CSS</li>
+                  <li class="glass-chip">JavaScript</li>
+                  <li class="glass-chip">PHP</li>
+                  <li class="glass-chip">MySQL</li>
+                </ul>
+              </article>
+
+              <article
+                class="skill-card glass-panel reveal reveal-right reveal-delay-2 tilt-card rounded-[2rem] p-6"
+              >
+                <h3 class="font-title text-2xl font-bold">Security</h3>
+                <ul class="mt-5 flex flex-wrap gap-2 text-sm text-white/70">
+                  <li class="glass-chip">Ethical Hacking</li>
+                  <li class="glass-chip">Risk Management</li>
+                  <li class="glass-chip">Computer Forensic</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- Education and Experience -->
+        <section id="journey" class="section-shell px-4 py-10 sm:px-6 lg:px-8">
+          <div class="mx-auto grid max-w-6xl gap-5 lg:grid-cols-2">
+            <article
+              id="education"
+              class="glass-panel reveal reveal-up tilt-card rounded-[2rem] p-6 sm:p-8"
+            >
+              <span class="section-kicker">Education</span>
+              <div class="timeline mt-8">
+                <div class="timeline-item">
+                  <span>Present</span>
+                  <h3>BSIT - Mobile & Internet</h3>
+                  <p>National University Fairview</p>
+                </div>
+                <div class="timeline-item">
+                  <span>Present</span>
+                  <h3>Cybersecurity Elective Path</h3>
+                  <p>National University Fairview</p>
+                </div>
+              </div>
+            </article>
+
+            <article
+              id="experience"
+              class="glass-panel reveal reveal-up reveal-delay-1 tilt-card rounded-[2rem] p-6 sm:p-8"
+            >
+              <span class="section-kicker">Experience</span>
+              <div class="timeline mt-8">
+                <div class="timeline-item">
+                  <span>Present</span>
+                  <h3>Information Officer</h3>
+                  <p>AWS Cloud Clubs Philippines</p>
+                </div>
+                <div class="timeline-item">
+                  <span>2022-2023</span>
+                  <h3>Customer Service Representative</h3>
+                  <p>Teleperformance</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section
+          id="contact"
+          class="section-shell px-4 py-10 sm:px-6 lg:px-8 lg:pb-16"
+        >
+          <div class="mx-auto max-w-6xl">
+            <article
+              class="glass-panel reveal reveal-up tilt-card rounded-[2rem] p-6 text-center sm:p-8 lg:p-10"
+            >
+              <span class="section-kicker">Contact</span>
+              <h2 class="section-title mx-auto max-w-3xl">
+                Building better digital experiences with curious people.
+              </h2>
+              <p
+                class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base"
+              >
+                I am currently looking for more opportunities and leadership
+                roles in organizations where I can contribute, learn, and grow
+                alongside other people in tech.
+              </p>
+              <div
+                class="action-row glass-panel tilt-card mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-4 rounded-[1.6rem] p-2"
+              >
+                <a
+                  class="cta-primary magnetic focus-ring"
+                  href="mailto:contact@example.com"
+                  >Contact Me</a
+                >
+                <a
+                  class="cta-secondary magnetic focus-ring"
+                  href="https://www.linkedin.com/in/raphael-c-953821361/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >LinkedIn</a
+                >
+                <a
+                  class="cta-secondary magnetic focus-ring"
+                  href="https://github.com/htmlcsslover"
+                  target="_blank"
+                  rel="noreferrer"
+                  >GitHub</a
+                >
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-4 pb-8 sm:px-6 lg:px-8">
+      <div
+        class="glass-panel tilt-card mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 rounded-[1.5rem] px-5 py-5 text-xs uppercase tracking-[0.22em] text-white/50 sm:flex-row"
+      >
+        <p>&copy; 2026 Raphael. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a
+            class="footer-link focus-ring"
+            href="https://github.com/htmlcsslover"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub</a
+          >
+          <a
+            class="footer-link focus-ring"
+            href="https://www.linkedin.com/in/raphael-c-953821361/"
+            target="_blank"
+            rel="noreferrer"
+            >LinkedIn</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script src="config/index.js"></script>
+    <script src="config/lightDarkMode.js"></script>
+  </body>
+</html>
