@@ -229,7 +229,7 @@ const ProjectsPage: React.FC<{ portfolioData: PortfolioData }> = ({ portfolioDat
   }, []);
 
   return (
-    <div className="pt-28 pb-20 lg:pt-32 lg:pb-24 min-h-screen">
+    <div className="pt-28 pb-20 lg:pt-32 lg:pb-24 min-h-[100svh] lg:min-h-screen">
       <Projects data={portfolioData.projects} />
     </div>
   );
@@ -327,7 +327,7 @@ const AppContent: React.FC = () => {
   }, [portfolioData, location.pathname]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden font-sans text-white antialiased">
+    <div className="min-h-[100svh] lg:min-h-screen overflow-x-hidden font-sans text-white antialiased">
       <ScrollToHash />
       <div className="site-bg" aria-hidden="true">
         <div className="bg-orb orb-1"></div>

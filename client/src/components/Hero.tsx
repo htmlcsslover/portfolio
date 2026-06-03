@@ -82,7 +82,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
     return (
       <section
         id="home"
-        className="relative min-h-screen px-5 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 lg:px-8 lg:pt-0 lg:pb-0 flex flex-col items-center justify-center lg:flex-row"
+        className="relative min-h-[100svh] lg:min-h-screen px-5 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 lg:px-8 lg:pt-0 lg:pb-0 flex flex-col items-center justify-center lg:flex-row"
       >
         <div className="mx-auto grid max-w-5xl w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 flex-grow-0 lg:flex-grow">
           {/* Left Side: About details and CTAs */}
@@ -125,7 +125,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
           </article>
 
           {/* Right Side: Portrait and Canvas Animation */}
-          <aside className="reveal relative mx-auto w-full max-w-[18rem] lg:max-w-[18rem]">
+          <aside className="reveal relative mx-auto w-full max-w-[min(18rem,82vw)] lg:max-w-[18rem]">
             <div className="portrait-shell glass-panel relative mx-auto aspect-[0.92] rounded-2xl p-4 sm:p-5 lg:p-4">
               <div className="portrait-media">
                 <img
