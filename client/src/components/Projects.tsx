@@ -251,13 +251,13 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
           className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl cursor-zoom-out"
           onClick={() => setIsLightboxOpen(false)}
         >
-          {/* Close Button: Absolute to TOP LEFT on Desktop, Hidden on Mobile */}
+          {/* Close Button: Fixed to TOP LEFT corner for all devices */}
           <button 
             onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); }}
-            className="absolute top-5 left-5 p-3 glass-panel rounded-full hover:bg-white/10 transition-all z-[210] cursor-pointer hidden md:flex items-center justify-center"
+            className="fixed top-4 left-4 md:top-6 md:left-6 p-2.5 md:p-3 glass-panel rounded-full hover:bg-white/10 transition-all z-[250] cursor-pointer flex items-center justify-center shadow-2xl"
             aria-label="Close lightbox"
           >
-            <X size={24} className="text-white" />
+            <X size={20} className="text-white md:w-6 md:h-6" />
           </button>
           
           <div className="w-full h-full flex items-center justify-center p-4 pointer-events-none">
