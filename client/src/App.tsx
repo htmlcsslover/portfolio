@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
@@ -7,6 +8,7 @@ import { Skills } from "./components/Skills";
 import { Journey } from "./components/Journey";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { Projects } from "./components/Projects";
 import { useInteractions } from "./hooks/useInteractions";
 import type { PortfolioData } from "./types";
 
@@ -122,7 +124,90 @@ const FALLBACK_DATA: PortfolioData = {
     kicker: "Connect",
     title: "Let's connect.",
     description: "I am always open to new opportunities, collaborations, or just talking about tech. The best way to reach out to me is through LinkedIn!"
+  },
+  projects: {
+    kicker: "Works",
+    title: "Featured Projects",
+    items: [
+      {
+        title: "Project One",
+        description: "A comprehensive solution for modern web challenges.",
+        image: "https://placehold.co/600x400/050713/white?text=Project+One",
+        link: "#"
+      },
+      {
+        title: "Project Two",
+        description: "Innovative design and development workflow optimization.",
+        image: "https://placehold.co/600x400/050713/white?text=Project+Two",
+        link: "#"
+      },
+      {
+        title: "Project Three",
+        description: "Scalable architecture for enterprise-level applications.",
+        image: "https://placehold.co/600x400/050713/white?text=Project+Three",
+        link: "#"
+      }
+    ]
   }
+};
+const MainContent: React.FC<{ 
+  portfolioData: PortfolioData; 
+  activeSection: string; 
+  showArrow: boolean; 
+  canvasRef: React.RefObject<HTMLCanvasElement | null>; 
+  heroImageRef: React.RefObject<HTMLImageElement | null>;
+}> = ({ portfolioData, activeSection, showArrow, canvasRef, heroImageRef }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          scrollToElement(element);
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  return (
+    <>
+      <Hero 
+        data={portfolioData.hero} 
+        canvasRef={canvasRef} 
+        heroImageRef={heroImageRef} 
+        showArrow={showArrow} 
+      />
+
+      <div id="main-content">
+        <Discovery data={portfolioData.discovery} />
+        
+        <Skills data={portfolioData.skills} />
+        
+        <Journey data={portfolioData.journey} />
+        
+        <Contact data={portfolioData.contact} socials={portfolioData.hero.socialLinks} />
+      </div>
+    </>
+  );
+};
+
+const ProjectsPage: React.FC<{ portfolioData: PortfolioData }> = ({ portfolioData }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="pt-28 min-h-screen">
+      <div className="mx-auto max-w-5xl px-4 mb-8">
+        <Link to="/" className="cta-secondary inline-flex items-center gap-2 mb-8 focus-ring">
+          ← Back to Home
+        </Link>
+      </div>
+      <Projects data={portfolioData.projects} />
+    </div>
+  );
 };
 
 const AppContent: React.FC = () => {
@@ -240,22 +325,18 @@ const AppContent: React.FC = () => {
       />
 
       <main>
-        <Hero 
-          data={portfolioData.hero} 
-          canvasRef={canvasRef} 
-          heroImageRef={heroImageRef} 
-          showArrow={showArrow} 
-        />
-
-        <div id="main-content">
-          <Discovery data={portfolioData.discovery} />
-          
-          <Skills data={portfolioData.skills} />
-          
-          <Journey data={portfolioData.journey} />
-          
-          <Contact data={portfolioData.contact} socials={portfolioData.hero.socialLinks} />
-        </div>
+        <Routes>
+          <Route path="/" element={
+            <MainContent 
+              portfolioData={portfolioData}
+              activeSection={activeSection}
+              showArrow={showArrow}
+              canvasRef={canvasRef}
+              heroImageRef={heroImageRef}
+            />
+          } />
+          <Route path="/projects" element={<ProjectsPage portfolioData={portfolioData} />} />
+        </Routes>
       </main>
 
       <Footer socials={portfolioData.hero.socialLinks} />
@@ -266,7 +347,9 @@ const AppContent: React.FC = () => {
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

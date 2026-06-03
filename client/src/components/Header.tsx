@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { scrollToElement } from "../utils/smoothScroll";
 
@@ -11,6 +12,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvasRef, heroImageRef }) => {
   const { isDarkMode, toggleTheme, startPreloading } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
     { label: "Discovery", id: "discovery" },
@@ -18,11 +20,15 @@ export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvas
     { label: "Connect", id: "contact" }
   ];
 
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const target = document.getElementById(id);
-    if (target) {
-      scrollToElement(target);
+  const handleScroll = (e: React.MouseEvent, id: string) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      const target = document.getElementById(id);
+      if (target) {
+        scrollToElement(target);
+        setMobileOpen(false);
+      }
+    } else {
       setMobileOpen(false);
     }
   };
@@ -37,26 +43,26 @@ export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvas
         className="glass-panel mx-auto flex max-w-5xl items-center justify-between gap-6 rounded-full px-4 py-5 text-xs uppercase tracking-[0.22em]"
         aria-label="Primary navigation"
       >
-        <a
-          href="#home"
+        <Link
+          to="/"
           onClick={(e) => handleScroll(e, "home")}
           className="brand-mark focus-ring text-2xl "
           aria-label="Raphael home"
         >
           R
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.id}
               className={`nav-link ${activeSection === link.id ? "active" : ""}`}
-              href={`#${link.id}`}
+              to={`/#${link.id}`}
               onClick={(e) => handleScroll(e, link.id)}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -93,14 +99,14 @@ export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvas
         <div id="mobile-nav" className="mx-auto mt-2 max-w-5xl md:hidden">
           <div className="glass-panel rounded-xl p-1.5 flex flex-col gap-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.id}
                 className={`mobile-nav-link ${activeSection === link.id ? "active" : ""}`}
-                href={`#${link.id}`}
+                to={`/#${link.id}`}
                 onClick={(e) => handleScroll(e, link.id)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

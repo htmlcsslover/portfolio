@@ -51,4 +51,21 @@ export interface PortfolioData {
     title: string;
     description: string;
   };
+  projects: {
+    kicker: string;
+    title: string;
+    items: {
+      title: string;
+      description: string;
+      image: string;
+      link: string;
+    }[];
+  };
+}
+
+export interface Project {
+  title: string;
+  description: string;
+  image: string;
+  link: string;
 }

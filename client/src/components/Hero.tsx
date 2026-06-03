@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { PortfolioData } from "../types";
 import { useTheme } from "../context/ThemeContext";
 import { scrollToElement } from "../utils/smoothScroll";
@@ -121,6 +123,12 @@ export const Hero: React.FC<HeroProps> = React.memo(
               >
                 Contact Me
               </a>
+              <Link
+                to="/projects"
+                className="cta-secondary flex items-center gap-1.5 focus-ring"
+              >
+                Projects <ArrowUpRight size={14} />
+              </Link>
               <a
                 className="cta-secondary focus-ring"
                 href={data.socialLinks.linkedin}

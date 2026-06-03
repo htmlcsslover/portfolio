@@ -113,5 +113,29 @@
     "kicker": "Connect",
     "title": "Let's connect.",
     "description": "I am always open to new opportunities, collaborations, or just talking about tech. The best way to reach out to me is through LinkedIn!"
+  },
+  "projects": {
+    "kicker": "Works",
+    "title": "Featured Projects",
+    "items": [
+      {
+        "title": "Project One",
+        "description": "A comprehensive solution for modern web challenges.",
+        "image": "https://placehold.co/600x400/050713/white?text=Project+One",
+        "link": "#"
+      },
+      {
+        "title": "Project Two",
+        "description": "Innovative design and development workflow optimization.",
+        "image": "https://placehold.co/600x400/050713/white?text=Project+Two",
+        "link": "#"
+      },
+      {
+        "title": "Project Three",
+        "description": "Scalable architecture for enterprise-level applications.",
+        "image": "https://placehold.co/600x400/050713/white?text=Project+Three",
+        "link": "#"
+      }
+    ]
   }
 }
