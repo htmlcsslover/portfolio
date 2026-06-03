@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({ activeSection, canvas
             onTouchStart={startPreloading}
             onClick={handleToggle}
           >
-            {isDarkMode ? "Light" : "Dark"}
+            {isDarkMode ? "Light Mode" : "Dark Mode"}
           </button>
         </div>
       </nav>

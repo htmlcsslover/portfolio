@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import type { PortfolioData, Project } from "../types";
 
 interface ProjectsProps {
@@ -10,10 +10,11 @@ interface ProjectsProps {
 export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // Lock scroll and hide navigation when modal is open
   useEffect(() => {
-    if (selectedProject) {
+    if (selectedProject || isLightboxOpen) {
       document.body.style.overflow = "hidden";
       document.documentElement.classList.add("modal-active");
     } else {
@@ -24,7 +25,7 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
       document.body.style.overflow = "unset";
       document.documentElement.classList.remove("modal-active");
     };
-  }, [selectedProject]);
+  }, [selectedProject, isLightboxOpen]);
 
   const handleViewDetails = (project: Project) => {
     setSelectedProject(project);
@@ -33,6 +34,7 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
 
   const handleClose = () => {
     setSelectedProject(null);
+    setIsLightboxOpen(false);
   };
 
   const handleNext = useCallback(() => {
@@ -50,29 +52,36 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!selectedProject) return;
-      if (e.key === "ArrowRight") handleNext();
-      if (e.key === "ArrowLeft") handlePrev();
-      if (e.key === "Escape") handleClose();
+      if (isLightboxOpen) {
+        if (e.key === "ArrowRight") handleNext();
+        if (e.key === "ArrowLeft") handlePrev();
+        if (e.key === "Escape") setIsLightboxOpen(false);
+        return;
+      }
+      if (selectedProject) {
+        if (e.key === "ArrowRight") handleNext();
+        if (e.key === "ArrowLeft") handlePrev();
+        if (e.key === "Escape") handleClose();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedProject, handleNext, handlePrev]);
+  }, [selectedProject, isLightboxOpen, handleNext, handlePrev]);
 
   return (
     <section id="projects" className="section-shell px-5 py-12 sm:py-20 lg:px-8 lg:py-7">
       <div className="mx-auto max-w-5xl">
         {/* Navigation & Header Section */}
         <div className="mb-10 flex flex-col reveal reveal-up lg:mb-8">
+          {/* Back Button - Desktop Only */}
           <Link 
             to="/" 
-            className="cta-secondary self-start inline-flex items-center gap-2 mb-10 focus-ring text-xs lg:mb-6"
+            className="cta-secondary self-start items-center gap-2 mb-10 focus-ring text-xs lg:mb-6 hidden md:inline-flex"
           >
             ← Back to Home
           </Link>
           
           <div className="flex flex-col">
-            {/* Title - Centered Horizontally */}
             <h2 className="section-title text-center text-neutral-900 dark:text-white max-w-3xl mx-auto">
               {data.title}
             </h2>
@@ -100,7 +109,7 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
                   <h3 className="font-title text-xl font-bold text-neutral-900 dark:text-white mb-2 leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-xs leading-5 text-neutral-600 dark:text-white/70 mb-4 line-clamp-3">
+                  <p className="text-xs leading-5 text-neutral-600 dark:text-white/70 mb-8 line-clamp-3">
                     {project.description}
                   </p>
 
@@ -133,43 +142,24 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
       {/* Gallery Modal */}
       {selectedProject && (
         <div className="fixed inset-0 z-[100] flex justify-center p-4 sm:p-6 lg:p-8 overflow-y-auto items-start">
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-neutral-950/95 backdrop-blur-2xl transition-opacity duration-300"
             onClick={handleClose}
           />
 
-          {/* Modal Content - Decreased size to max-w-3xl */}
           <div className="glass-panel relative w-full max-w-3xl rounded-3xl p-5 md:p-8 lg:p-7 flex flex-col gap-6 md:gap-8 shadow-2xl reveal-up is-visible lg:gap-6 lg:rounded-2xl mt-4 md:mt-6 lg:mt-8">
-            
-            {/* Header Block */}
-            <div className="flex flex-col gap-4">
-              <h3 className="font-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-900 dark:text-white leading-tight lg:text-3xl order-1">
+            <div className="order-1">
+              <h3 className="font-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-900 dark:text-white leading-tight lg:text-3xl">
                 {selectedProject.title}
               </h3>
-              
-              <div className="flex flex-col gap-4 order-4 md:order-2">
-                <p className="text-xs sm:text-sm leading-5 md:leading-6 text-neutral-600 dark:text-white/70 max-w-3xl">
-                  {selectedProject.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5 md:gap-2 lg:gap-2">
-                  {selectedProject.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="glass-chip text-[9px] md:text-[10px] px-2.5 py-1 md:px-3 md:py-1 font-bold md:font-semibold"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
 
-            {/* Gallery Area */}
             <div className="order-2 md:order-4 flex flex-col gap-5 md:gap-6">
               <div className="relative group">
-                {/* Border removed from screenshot container */}
-                <div className="relative aspect-video w-full rounded-xl md:rounded-2xl overflow-hidden shadow-2xl mx-auto bg-neutral-900/50">
+                <div 
+                  className="relative aspect-video w-full overflow-hidden shadow-2xl mx-auto cursor-zoom-in"
+                  onClick={() => setIsLightboxOpen(true)}
+                >
                   <img
                     src={selectedProject.screenshots[currentIdx]}
                     alt={`${selectedProject.title} screenshot ${currentIdx + 1}`}
@@ -177,33 +167,37 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
                     key={currentIdx}
                   />
 
-                  {/* Desktop Nav Arrows */}
-                  <div className="hidden md:flex absolute inset-0 items-center justify-between px-4 pointer-events-none">
+                  {/* Desktop Nav Arrows (Integrated Overlay) */}
+                  <div className="hidden md:flex absolute inset-0 items-center justify-between px-2 pointer-events-none">
                     <button
                       onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-                      className="glass-panel p-3 rounded-full hover:bg-white/10 transition-all hover:scale-110 focus-ring pointer-events-auto opacity-0 group-hover:opacity-100"
+                      className="glass-panel p-2 rounded-full hover:bg-white/10 transition-all hover:scale-110 focus-ring pointer-events-auto opacity-0 group-hover:opacity-100"
                       aria-label="Previous screenshot"
                     >
-                      <ChevronLeft size={24} className="text-neutral-900 dark:text-white" />
+                      <ChevronLeft size={20} className="text-neutral-900 dark:text-white" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleNext(); }}
-                      className="glass-panel p-3 rounded-full hover:bg-white/10 transition-all hover:scale-110 focus-ring pointer-events-auto opacity-0 group-hover:opacity-100"
+                      className="glass-panel p-2 rounded-full hover:bg-white/10 transition-all hover:scale-110 focus-ring pointer-events-auto opacity-0 group-hover:opacity-100"
                       aria-label="Next screenshot"
                     >
-                      <ChevronRight size={24} className="text-neutral-900 dark:text-white" />
+                      <ChevronRight size={20} className="text-neutral-900 dark:text-white" />
                     </button>
                   </div>
 
-                  {/* Mobile Touch Navigation */}
+                  <div className="absolute bottom-2 right-2 p-1.5 glass-panel rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <Maximize2 size={14} className="text-white/60" />
+                  </div>
+
+                  {/* Mobile Touch Area */}
                   <div className="absolute inset-0 flex md:hidden">
-                    <button onClick={handlePrev} className="w-1/2 h-full cursor-w-resize" />
-                    <button onClick={handleNext} className="w-1/2 h-full cursor-e-resize" />
+                    <button onClick={(e) => { e.stopPropagation(); handlePrev(); }} className="w-1/3 h-full cursor-w-resize" />
+                    <button onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(true); }} className="w-1/3 h-full cursor-zoom-in" />
+                    <button onClick={(e) => { e.stopPropagation(); handleNext(); }} className="w-1/3 h-full cursor-e-resize" />
                   </div>
                 </div>
               </div>
 
-              {/* Centered Controls Area */}
               <div className="flex flex-col items-center gap-4">
                 <div className="flex justify-center w-full">
                   <div className="flex gap-2.5 md:gap-3 overflow-x-auto no-scrollbar scroll-smooth px-2 max-w-full">
@@ -217,34 +211,97 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
                             : "border-transparent opacity-30 hover:opacity-100"
                         }`}
                       >
-                        <img
-                          src={ss}
-                          className="w-full h-full object-cover"
-                          alt="thumbnail"
-                        />
+                        <img src={ss} className="w-full h-full object-cover" alt="thumbnail" />
                       </button>
                     ))}
                   </div>
                 </div>
-
                 <div className="glass-chip px-5 py-1.5 md:px-4 md:py-1 text-[10px] md:text-[11px] font-black tracking-[0.15em] uppercase opacity-90">
                   {currentIdx + 1} / {selectedProject.screenshots.length}
                 </div>
+              </div>
+            </div>
+
+            <div className="order-4 md:order-2">
+              <p className="text-xs sm:text-sm leading-5 md:leading-6 text-neutral-600 dark:text-white/70 max-w-3xl">
+                {selectedProject.description}
+              </p>
+            </div>
+
+            <div className="order-5 md:order-3">
+              <div className="flex flex-wrap gap-1.5 md:gap-2 lg:gap-2">
+                {selectedProject.techStack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="glass-chip text-[9px] md:text-[10px] px-2.5 py-1 md:px-3 md:py-1 font-bold md:font-semibold"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Immersive Mode Styles */}
+      {/* Fullscreen Lightbox */}
+      {isLightboxOpen && selectedProject && (
+        <div 
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl cursor-zoom-out"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Close Button: Fixed to TOP LEFT on Desktop, Hidden on Mobile */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); }}
+            className="fixed top-8 left-8 p-3 glass-panel rounded-full hover:bg-white/10 transition-all z-[210] cursor-pointer hidden md:flex items-center justify-center"
+            aria-label="Close lightbox"
+          >
+            <X size={24} className="text-white" />
+          </button>
+          
+          <div className="w-full h-full flex items-center justify-center p-4">
+            <img 
+              src={selectedProject.screenshots[currentIdx]}
+              alt="Fullscreen screenshot"
+              className="max-w-full max-h-full object-contain shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Unified Bottom Controls */}
+          <div 
+            className="absolute inset-x-0 bottom-10 flex flex-col items-center gap-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-8 glass-panel px-6 py-3 rounded-full shadow-2xl">
+              <button 
+                onClick={(e) => { e.stopPropagation(); handlePrev(); }} 
+                className="p-2 rounded-full hover:bg-white/10 transition-all hover:scale-110"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={28} className="text-white" />
+              </button>
+              
+              <div className="glass-chip px-6 py-2 text-xs font-black tracking-widest border-none">
+                {currentIdx + 1} / {selectedProject.screenshots.length}
+              </div>
+
+              <button 
+                onClick={(e) => { e.stopPropagation(); handleNext(); }} 
+                className="p-2 rounded-full hover:bg-white/10 transition-all hover:scale-110"
+                aria-label="Next image"
+              >
+                <ChevronRight size={28} className="text-white" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .modal-active header,
-        .modal-active footer {
-          display: none !important;
-        }
+        .modal-active header, .modal-active footer { display: none !important; }
       `}</style>
     </section>
   );

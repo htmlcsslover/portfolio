@@ -17,25 +17,17 @@ export const Hero: React.FC<HeroProps> = React.memo(
     const { portraitIsDark } = useTheme();
     const [typingText, setTypingText] = useState("");
     const [reducedMotion, setReducedMotion] = useState(false);
-    const [isDesktop, setIsDesktop] = useState(false);
 
     // Check media queries
     useEffect(() => {
       const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
       setReducedMotion(motionMedia.matches);
 
-      const desktopMedia = window.matchMedia("(min-width: 1024px)");
-      setIsDesktop(desktopMedia.matches);
-
       const motionListener = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-      const desktopListener = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-
       motionMedia.addEventListener("change", motionListener);
-      desktopMedia.addEventListener("change", desktopListener);
 
       return () => {
         motionMedia.removeEventListener("change", motionListener);
-        desktopMedia.removeEventListener("change", desktopListener);
       };
     }, []);
 
@@ -90,9 +82,9 @@ export const Hero: React.FC<HeroProps> = React.memo(
     return (
       <section
         id="home"
-        className="relative min-h-screen px-5 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 lg:px-8 lg:pt-0 lg:pb-12 flex items-center justify-center"
+        className="relative min-h-screen px-5 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 lg:px-8 lg:pt-0 lg:pb-0 flex flex-col items-center justify-center lg:flex-row"
       >
-        <div className="mx-auto grid max-w-5xl w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
+        <div className="mx-auto grid max-w-5xl w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 flex-grow-0 lg:flex-grow">
           {/* Left Side: About details and CTAs */}
           <article className="hero-glass glass-panel tilt-card reveal relative rounded-2xl p-6 sm:p-8 lg:p-7 flex flex-col justify-between">
             <div className="flex flex-col gap-4">
@@ -142,25 +134,25 @@ export const Hero: React.FC<HeroProps> = React.memo(
                   src={portraitIsDark ? "/images/darkMode.png" : "/images/lightMode.png"}
                   alt="Raphael Portrait"
                   loading="eager"
-                  className="absolute inset-0 w-full h-full object-cover scale-135 translate-y-4 lg:scale-[1.335] lg:translate-y-0"
+                  className="absolute inset-0 w-full h-full object-cover scale-[1.335]"
                   style={{ 
-                    objectPosition: isDesktop ? "center -25%" : "center -25%", 
+                    objectPosition: "center -25%", 
                     transition: "opacity 260ms ease, transform 260ms ease" 
                   }}
-                  data-light-scale={isDesktop ? "1.335" : undefined}
-                  data-dark-scale={isDesktop ? "1.335" : undefined}
-                  data-light-position={isDesktop ? "center -25%" : undefined}
-                  data-dark-position={isDesktop ? "center -22%" : undefined}
+                  data-light-scale="1.335"
+                  data-dark-scale="1.335"
+                  data-light-position="center -25%"
+                  data-dark-position="center -22%"
                 />
                 <canvas
                   id="transition-canvas"
                   ref={canvasRef}
                   className="absolute inset-0 w-full h-full opacity-0 pointer-events-none object-cover"
                   style={{ visibility: "hidden" }}
-                  data-frame-light-scale={isDesktop ? "1" : undefined}
-                  data-frame-dark-scale={isDesktop ? "1" : undefined}
-                  data-frame-light-position={isDesktop ? "center 14.78%" : undefined}
-                  data-frame-dark-position={isDesktop ? "center 14.88%" : undefined}
+                  data-frame-light-scale="1"
+                  data-frame-dark-scale="1"
+                  data-frame-light-position="center 14.78%"
+                  data-frame-dark-position="center 14.88%"
                 />
               </div>
               <div className="portrait-shine" aria-hidden="true"></div>
@@ -177,9 +169,25 @@ export const Hero: React.FC<HeroProps> = React.memo(
           </aside>
         </div>
 
+        {/* Down arrow triggers section scroll - Absolute on Desktop, Relative on Mobile */}
+        <div className="flex justify-center w-full mt-12 mb-8 lg:hidden">
+          <button
+            className={`scroll-arrow focus-ring !relative !left-0 !bottom-0 !translate-x-0 ${showArrow ? "" : "hidden-arrow"}`}
+            type="button"
+            aria-label="Scroll to Discovery"
+            onClick={handleScrollDown}
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Desktop-only Absolute Arrow */}
         <button
-          id="scroll-arrow"
-          className={`scroll-arrow focus-ring ${showArrow ? "" : "hidden-arrow"}`}
+          id="scroll-arrow-desktop"
+          className={`scroll-arrow focus-ring hidden lg:grid ${showArrow ? "" : "hidden-arrow"}`}
+          style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)' }}
           type="button"
           aria-label="Scroll to Discovery"
           onClick={handleScrollDown}
