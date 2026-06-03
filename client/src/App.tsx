@@ -10,6 +10,7 @@ import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { Projects } from "./components/Projects";
 import { useInteractions } from "./hooks/useInteractions";
+import { scrollToElement } from "./utils/smoothScroll";
 import type { PortfolioData } from "./types";
 
 // Resilient Fallback Data matching the JSON file
@@ -152,11 +153,10 @@ const FALLBACK_DATA: PortfolioData = {
 };
 const MainContent: React.FC<{ 
   portfolioData: PortfolioData; 
-  activeSection: string; 
   showArrow: boolean; 
   canvasRef: React.RefObject<HTMLCanvasElement | null>; 
   heroImageRef: React.RefObject<HTMLImageElement | null>;
-}> = ({ portfolioData, activeSection, showArrow, canvasRef, heroImageRef }) => {
+}> = ({ portfolioData, showArrow, canvasRef, heroImageRef }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -226,7 +226,12 @@ const AppContent: React.FC = () => {
     fetch("/api/portfolio")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          return res.json();
+        } else {
+          throw new Error("Received non-JSON response");
+        }
       })
       .then((data) => {
         setPortfolioData(data);
@@ -329,7 +334,6 @@ const AppContent: React.FC = () => {
           <Route path="/" element={
             <MainContent 
               portfolioData={portfolioData}
-              activeSection={activeSection}
               showArrow={showArrow}
               canvasRef={canvasRef}
               heroImageRef={heroImageRef}

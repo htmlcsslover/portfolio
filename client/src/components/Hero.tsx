@@ -34,7 +34,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
       let phraseIndex = 0;
       let charIndex = 0;
       let deleting = false;
-      let timerId: any = null;
+      let timerId: ReturnType<typeof setTimeout> | undefined;
 
       const typeLoop = () => {
         const phrase = data.typingPhrases[phraseIndex];

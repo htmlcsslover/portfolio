@@ -196,7 +196,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       activeRef.current = false;
       clearTimeout(timer);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Clean up RAF on unmount
@@ -475,6 +474,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) throw new Error("useTheme must be used within a ThemeProvider");
