@@ -232,14 +232,45 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     img: HTMLImageElement,
     targetDark: boolean
   ) => {
-    // Read scale/position from canvas data attributes (set in Hero.tsx)
-    const scale = targetDark
-      ? parseFloat(canvas.dataset.frameDarkScale || heroImage.dataset.darkScale || "1")
-      : parseFloat(canvas.dataset.frameLightScale || heroImage.dataset.lightScale || "1");
+    // Determine if we are in mobile view (aligning with lg: 1024px breakpoint)
+    const isMobile = window.innerWidth < 1024;
 
-    const position = targetDark
-      ? canvas.dataset.frameDarkPosition || heroImage.dataset.darkPosition || "center center"
-      : canvas.dataset.frameLightPosition || heroImage.dataset.lightPosition || "center center";
+    // Read scale/position from canvas data attributes (set in Hero.tsx)
+    // Priority: 1. Mobile Specific attributes (if on mobile) 2. General attributes 3. Default "1" / "center center"
+    
+    let scale: number;
+    if (isMobile) {
+      const mobileVal = targetDark 
+        ? (canvas.dataset.mobileFrameDarkScale || heroImage.dataset.mobileDarkScale)
+        : (canvas.dataset.mobileFrameLightScale || heroImage.dataset.mobileLightScale);
+      
+      scale = mobileVal 
+        ? parseFloat(mobileVal) 
+        : (targetDark
+            ? parseFloat(canvas.dataset.frameDarkScale || heroImage.dataset.darkScale || "1")
+            : parseFloat(canvas.dataset.frameLightScale || heroImage.dataset.lightScale || "1"));
+    } else {
+      scale = targetDark
+        ? parseFloat(canvas.dataset.frameDarkScale || heroImage.dataset.darkScale || "1")
+        : parseFloat(canvas.dataset.frameLightScale || heroImage.dataset.lightScale || "1");
+    }
+
+    let position: string;
+    if (isMobile) {
+      const mobilePos = targetDark
+        ? (canvas.dataset.mobileFrameDarkPosition || heroImage.dataset.mobileDarkPosition)
+        : (canvas.dataset.mobileFrameLightPosition || heroImage.dataset.mobileLightPosition);
+      
+      position = mobilePos 
+        ? mobilePos 
+        : (targetDark
+            ? (canvas.dataset.frameDarkPosition || heroImage.dataset.darkPosition || "center center")
+            : (canvas.dataset.frameLightPosition || heroImage.dataset.lightPosition || "center center"));
+    } else {
+      position = targetDark
+        ? canvas.dataset.frameDarkPosition || heroImage.dataset.darkPosition || "center center"
+        : canvas.dataset.frameLightPosition || heroImage.dataset.lightPosition || "center center";
+    }
 
     // Object-cover math
     const canvasRatio = canvas.width / canvas.height;
@@ -261,10 +292,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [xPos, yPos] = position.split(" ");
     if (xPos === "left") dx = 0;
     if (xPos === "right") dx = canvas.width - drawWidth;
+    
     if (yPos === "top") dy = 0;
     else if (yPos === "bottom") dy = canvas.height - drawHeight;
     else if (yPos?.includes("%")) {
       dy = (canvas.height - drawHeight) * (parseFloat(yPos) / 100);
+    } else if (yPos?.startsWith("-")) {
+       // Support negative offsets for vertical tuning
+       dy = (canvas.height - drawHeight) * (parseFloat(yPos) / 100);
     }
 
     ctx.drawImage(img, dx, dy, drawWidth, drawHeight);

@@ -139,20 +139,42 @@ export const Hero: React.FC<HeroProps> = React.memo(
                     objectPosition: "center -25%", 
                     transition: "opacity 260ms ease, transform 260ms ease" 
                   }}
+                  
+                  /* 
+                    DESKTOP VALUES (lg and above)
+                    Changing these will modify the desktop case-study crop.
+                  */
                   data-light-scale="1.335"
                   data-dark-scale="1.335"
                   data-light-position="center -25%"
                   data-dark-position="center -22%"
+
+                  /* 
+                    MOBILE VALUES (Below 1024px)
+                    Adjust these to tune the mobile portrait without affecting desktop.
+                  */
+                  data-mobile-light-scale="1.335"
+                  data-mobile-dark-scale="1.335"
+                  data-mobile-light-position="center -25%"
+                  data-mobile-dark-position="center -25%"
                 />
                 <canvas
                   id="transition-canvas"
                   ref={canvasRef}
                   className="absolute inset-0 w-full h-full opacity-0 pointer-events-none object-cover"
                   style={{ visibility: "hidden" }}
+
+                  /* DESKTOP CANVAS MAPPING */
                   data-frame-light-scale="1"
                   data-frame-dark-scale="1"
                   data-frame-light-position="center 14.78%"
                   data-frame-dark-position="center 14.88%"
+
+                  /* MOBILE CANVAS MAPPING */
+                  data-mobile-frame-light-scale="1"
+                  data-mobile-frame-dark-scale="1"
+                  data-mobile-frame-light-position="center 14.78%"
+                  data-mobile-frame-dark-position="center 14.78%"
                 />
               </div>
               <div className="portrait-shine" aria-hidden="true"></div>
