@@ -125,7 +125,7 @@ const FALLBACK_DATA: PortfolioData = {
 };
 
 const AppContent: React.FC = () => {
-  const portfolioData = FALLBACK_DATA;
+  const [portfolioData, setPortfolioData] = useState<PortfolioData>(FALLBACK_DATA);
   const [activeSection, setActiveSection] = useState("home");
   
   const [showArrow, setShowArrow] = useState(true);
@@ -133,6 +133,21 @@ const AppContent: React.FC = () => {
   // Refs for theme transitions
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroImageRef = useRef<HTMLImageElement>(null);
+
+  // Fetch data from the API
+  useEffect(() => {
+    fetch("/api/portfolio")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      })
+      .then((data) => {
+        setPortfolioData(data);
+      })
+      .catch((err) => {
+        console.warn("Using fallback data due to fetch error:", err);
+      });
+  }, []);
 
   // Scroll animations and arrow display observers
   useEffect(() => {

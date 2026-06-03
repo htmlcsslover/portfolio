@@ -77,7 +77,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
     return (
       <section
         id="home"
-        className="relative min-h-screen px-4 pb-12 pt-28 sm:px-6 lg:px-8 flex items-center justify-center"
+      className="relative min-h-screen px-4 pb-12 pt-28 sm:px-6 lg:px-8 flex items-center justify-center"
       >
         <div className="mx-auto grid max-w-5xl w-full items-center gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           {/* Left Side: About details and CTAs */}
