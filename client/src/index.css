@@ -229,7 +229,28 @@ button {
     );
 }
 
-/* Mouse follow tracking glow removed for performance */
+/* Mouse follow tracking glow */
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 14rem at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 43, 214, 0.12),
+    rgba(103, 232, 249, 0.05) 30%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.glass-panel:hover::after,
+.glass-panel.is-glowing::after {
+  opacity: 1;
+}
 
 /* Mobile & Tablet performance overrides */
 @media (max-width: 768px) {
@@ -674,7 +695,10 @@ html:not(.dark) .scroll-arrow {
   transform: translateY(0);
 }
 
-/* .tilt-card properties removed for performance */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
 
 .focus-ring:focus-visible {
   outline: 2px solid var(--accent-cyan);

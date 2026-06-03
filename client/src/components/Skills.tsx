@@ -27,7 +27,7 @@ export const Skills: React.FC<SkillsProps> = React.memo(({ data }) => {
           {data.categories.map((category, idx) => (
             <article
               key={idx}
-              className={`skill-card h-full glass-panel reveal rounded-2xl p-5 ${delayClasses[idx % 3]}`}
+              className={`skill-card tilt-card h-full glass-panel reveal rounded-2xl p-5 ${delayClasses[idx % 3]}`}
             >
               <h3 className="font-title text-lg font-bold text-neutral-900 dark:text-white">
                 {category.name}

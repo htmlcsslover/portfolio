@@ -12,7 +12,7 @@ export const Journey: React.FC<JourneyProps> = React.memo(({ data }) => {
         {/* Education Timeline */}
         <article
           id="education"
-          className="glass-panel reveal reveal-up rounded-2xl p-5 sm:p-6"
+          className="glass-panel tilt-card reveal reveal-up rounded-2xl p-5 sm:p-6"
         >
           <span className="section-kicker">{data.education.kicker}</span>
           <div className="timeline mt-5">
@@ -29,7 +29,7 @@ export const Journey: React.FC<JourneyProps> = React.memo(({ data }) => {
         {/* Experience Timeline */}
         <article
           id="experience"
-          className="glass-panel reveal reveal-up reveal-delay-1 rounded-2xl p-5 sm:p-6"
+          className="glass-panel tilt-card reveal reveal-up reveal-delay-1 rounded-2xl p-5 sm:p-6"
         >
           <span className="section-kicker">{data.experience.kicker}</span>
           <div className="timeline mt-5">

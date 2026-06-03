@@ -81,7 +81,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
       >
         <div className="mx-auto grid max-w-5xl w-full items-center gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           {/* Left Side: About details and CTAs */}
-          <article className="hero-glass glass-panel reveal relative rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col justify-between">
+          <article className="hero-glass glass-panel tilt-card reveal relative rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col justify-between">
             <div className="flex flex-col gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 {data.badges.map((badge, idx) => (

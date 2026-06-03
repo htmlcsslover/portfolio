@@ -7,6 +7,7 @@ import { Skills } from "./components/Skills";
 import { Journey } from "./components/Journey";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { useInteractions } from "./hooks/useInteractions";
 import type { PortfolioData } from "./types";
 
 // Resilient Fallback Data matching the JSON file
@@ -125,6 +126,7 @@ const FALLBACK_DATA: PortfolioData = {
 };
 
 const AppContent: React.FC = () => {
+  useInteractions();
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(FALLBACK_DATA);
   const [activeSection, setActiveSection] = useState("home");
   

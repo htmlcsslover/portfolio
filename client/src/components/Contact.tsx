@@ -10,7 +10,7 @@ export const Contact: React.FC<ContactProps> = React.memo(({ data, socials }) =>
   return (
     <section id="contact" className="section-shell px-4 py-7 sm:px-6 lg:px-8 lg:pb-12">
       <div className="mx-auto max-w-5xl">
-        <article className="glass-panel reveal reveal-up rounded-2xl p-5 sm:p-6 lg:p-7 text-center">
+        <article className="glass-panel tilt-card reveal reveal-up rounded-2xl p-5 sm:p-6 lg:p-7 text-center">
           <div className="reveal reveal-left flex flex-col items-center">
             <span className="section-kicker">{data.kicker}</span>
             <h2 className="section-title text-neutral-900 dark:text-white max-w-3xl">
