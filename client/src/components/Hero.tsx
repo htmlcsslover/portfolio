@@ -191,25 +191,10 @@ export const Hero: React.FC<HeroProps> = React.memo(
           </aside>
         </div>
 
-        {/* Down arrow triggers section scroll - Absolute on Desktop, Relative on Mobile */}
-        <div className="flex justify-center w-full mt-12 mb-8 lg:hidden">
-          <button
-            className={`scroll-arrow focus-ring !relative !left-0 !bottom-0 !translate-x-0 ${showArrow ? "" : "hidden-arrow"}`}
-            type="button"
-            aria-label="Scroll to Discovery"
-            onClick={handleScrollDown}
-          >
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Desktop-only Absolute Arrow */}
+        {/* Unified Responsive Down Arrow */}
         <button
-          id="scroll-arrow-desktop"
-          className={`scroll-arrow focus-ring hidden lg:grid ${showArrow ? "" : "hidden-arrow"}`}
-          style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)' }}
+          id="scroll-arrow"
+          className={`scroll-arrow focus-ring !relative !left-0 !bottom-0 !translate-x-0 mx-auto mt-12 mb-8 lg:!absolute lg:!left-1/2 lg:!bottom-6 lg:!-translate-x-1/2 lg:mt-0 lg:mb-0 ${showArrow ? "" : "hidden-arrow"}`}
           type="button"
           aria-label="Scroll to Discovery"
           onClick={handleScrollDown}
