@@ -61,8 +61,8 @@ export const useInteractions = () => {
         ) {
           const x = (e.clientX - rect.left) / rect.width - 0.5;
           const y = (e.clientY - rect.top) / rect.height - 0.5;
-          const intensity = 4; // Tilt intensity
-          (card as HTMLElement).style.transform = `perspective(1000px) rotateY(${x * intensity}deg) rotateX(${-y * intensity}deg) scale3d(1.02, 1.02, 1.02)`;
+          const intensity = 8; // High drama tilt
+          (card as HTMLElement).style.transform = `perspective(1000px) rotateY(${x * intensity}deg) rotateX(${-y * intensity}deg) scale3d(1.1, 1.1, 1.1)`; // Unified to 1.1
         } else {
           (card as HTMLElement).style.transform = "";
         }

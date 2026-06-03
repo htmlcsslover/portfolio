@@ -119,21 +119,42 @@
     "title": "Featured Projects",
     "items": [
       {
-        "title": "Project One",
-        "description": "A comprehensive solution for modern web challenges.",
-        "image": "https://placehold.co/600x400/050713/white?text=Project+One",
+        "title": "StellarX: OFW Split Remittance System",
+        "description": "A Stellar-powered remittance platform that allows Overseas Filipino Workers to automatically split and distribute funds to multiple family members through programmable payments and claimable balances.",
+        "techStack": ["React", "Vite", "TypeScript", "Tailwind CSS", "Stellar SDK", "Freighter Wallet", "Claimable Balances"],
+        "image": "/images/projects/project-1/placeholder.png",
+        "screenshots": [
+          "/images/projects/project-1/screenshot-1.png",
+          "/images/projects/project-1/screenshot-2.png",
+          "/images/projects/project-1/screenshot-3.png"
+        ],
         "link": "#"
       },
       {
-        "title": "Project Two",
-        "description": "Innovative design and development workflow optimization.",
-        "image": "https://placehold.co/600x400/050713/white?text=Project+Two",
+        "title": "StellarX: BNPL Decentralized Marketplace",
+        "description": "A decentralized Buy Now, Pay Later (BNPL) marketplace built on the Stellar network. Users can purchase products through community-funded installment plans, build on-chain credit reputation, and complete transparent payments secured by Soroban smart contracts.",
+        "techStack": ["React", "TypeScript", "Node.js", "Stellar SDK", "Soroban", "Tailwind CSS"],
+        "image": "/images/projects/project-2/placeholder.png",
+        "screenshots": [
+          "/images/projects/project-2/screenshot-1.png",
+          "/images/projects/project-2/screenshot-2.png",
+          "/images/projects/project-2/screenshot-3.png",
+          "/images/projects/project-2/screenshot-4.png",
+          "/images/projects/project-2/screenshot-5.png"
+        ],
         "link": "#"
       },
       {
-        "title": "Project Three",
-        "description": "Scalable architecture for enterprise-level applications.",
-        "image": "https://placehold.co/600x400/050713/white?text=Project+Three",
+        "title": "StellarX: BayanFund Decentralized Crowdfunding Platform",
+        "description": "A decentralized social impact platform that allows communities, nonprofits, and verified beneficiaries to raise funds with complete transparency. BayanFund leverages Stellar payments and Soroban smart contracts to track donations, manage verified funding needs, automate disbursements, and provide an immutable public audit trail for every contribution.",
+        "techStack": ["React", "Vite", "TypeScript", "Stellar SDK", "Soroban", "Tailwind CSS", "Node.js"],
+        "image": "/images/projects/project-3/placeholder.png",
+        "screenshots": [
+          "/images/projects/project-3/screenshot-1.png",
+          "/images/projects/project-3/screenshot-3.png",
+          "/images/projects/project-3/screenshot-4.png",
+          "/images/projects/project-3/screenshot-5.png"
+        ],
         "link": "#"
       }
     ]

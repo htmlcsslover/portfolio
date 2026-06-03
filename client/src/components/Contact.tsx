@@ -8,35 +8,35 @@ interface ContactProps {
 
 export const Contact: React.FC<ContactProps> = React.memo(({ data, socials }) => {
   return (
-    <section id="contact" className="section-shell px-4 py-7 sm:px-6 lg:px-8 lg:pb-12">
+    <section id="contact" className="section-shell px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-7 lg:pb-12">
       <div className="mx-auto max-w-5xl">
-        <article className="glass-panel tilt-card reveal reveal-up rounded-2xl p-5 sm:p-6 lg:p-7 text-center">
+        <article className="glass-panel tilt-card reveal reveal-up rounded-2xl p-6 sm:p-10 lg:p-7 text-center">
           <div className="reveal reveal-left flex flex-col items-center">
             <span className="section-kicker">{data.kicker}</span>
             <h2 className="section-title text-neutral-900 dark:text-white max-w-3xl">
               {data.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-xs leading-6 text-neutral-600 dark:text-white/70 sm:text-sm">
+            <p className="mt-5 max-w-2xl text-xs leading-6 text-neutral-600 dark:text-white/70 sm:text-sm sm:leading-7 lg:leading-6">
               {data.description}
             </p>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-10 lg:mt-8 flex flex-wrap items-center justify-center gap-5 sm:gap-4">
             <a
-              className="cta-primary focus-ring px-6 py-3 text-sm font-semibold"
+              className="cta-primary focus-ring px-8 py-4 sm:px-6 sm:py-3 text-sm font-bold sm:font-semibold"
               href={socials.linkedin}
               target="_blank"
               rel="noreferrer"
             >
-              LinkedIn
+              Connect on LinkedIn
             </a>
             <a
-              className="cta-secondary focus-ring px-6 py-3 text-sm font-semibold"
+              className="cta-secondary focus-ring px-8 py-4 sm:px-6 sm:py-3 text-sm font-bold sm:font-semibold"
               href={socials.github}
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
+              Follow on GitHub
             </a>
           </div>
         </article>

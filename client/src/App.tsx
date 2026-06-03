@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
@@ -131,46 +131,79 @@ const FALLBACK_DATA: PortfolioData = {
     title: "Featured Projects",
     items: [
       {
-        title: "Project One",
-        description: "A comprehensive solution for modern web challenges.",
-        image: "https://placehold.co/600x400/050713/white?text=Project+One",
+        title: "StellarX: OFW Split Remittance System",
+        description: "A Stellar-powered remittance platform that allows Overseas Filipino Workers to automatically split and distribute funds to multiple family members through programmable payments and claimable balances.",
+        techStack: ["React", "Vite", "TypeScript", "Tailwind CSS", "Stellar SDK", "Freighter Wallet", "Claimable Balances"],
+        image: "/images/projects/project-1/placeholder.png",
+        screenshots: [
+          "/images/projects/project-1/screenshot-1.png",
+          "/images/projects/project-1/screenshot-2.png",
+          "/images/projects/project-1/screenshot-3.png"
+        ],
         link: "#"
       },
       {
-        title: "Project Two",
-        description: "Innovative design and development workflow optimization.",
-        image: "https://placehold.co/600x400/050713/white?text=Project+Two",
+        title: "StellarX: BNPL Decentralized Marketplace",
+        description: "A decentralized Buy Now, Pay Later (BNPL) marketplace built on the Stellar network. Users can purchase products through community-funded installment plans, build on-chain credit reputation, and complete transparent payments secured by Soroban smart contracts.",
+        techStack: ["React", "TypeScript", "Node.js", "Stellar SDK", "Soroban", "Tailwind CSS"],
+        image: "/images/projects/project-2/placeholder.png",
+        screenshots: [
+          "/images/projects/project-2/screenshot-1.png",
+          "/images/projects/project-2/screenshot-2.png",
+          "/images/projects/project-2/screenshot-3.png",
+          "/images/projects/project-2/screenshot-4.png",
+          "/images/projects/project-2/screenshot-5.png"
+        ],
         link: "#"
       },
       {
-        title: "Project Three",
-        description: "Scalable architecture for enterprise-level applications.",
-        image: "https://placehold.co/600x400/050713/white?text=Project+Three",
+        title: "StellarX: BayanFund Decentralized Crowdfunding Platform",
+        description: "A decentralized social impact platform that allows communities, nonprofits, and verified beneficiaries to raise funds with complete transparency. BayanFund leverages Stellar payments and Soroban smart contracts to track donations, manage verified funding needs, automate disbursements, and provide an immutable public audit trail for every contribution.",
+        techStack: ["React", "Vite", "TypeScript", "Stellar SDK", "Soroban", "Tailwind CSS", "Node.js"],
+        image: "/images/projects/project-3/placeholder.png",
+        screenshots: [
+          "/images/projects/project-3/screenshot-1.png",
+          "/images/projects/project-3/screenshot-3.png",
+          "/images/projects/project-3/screenshot-4.png",
+          "/images/projects/project-3/screenshot-5.png"
+        ],
         link: "#"
       }
     ]
   }
 };
+
+/**
+ * Global Scroll to Hash Handler
+ * Listens for location changes and scrolls to hash if present.
+ * Works across all routes.
+ */
+const ScrollToHash: React.FC = () => {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+
+    const id = hash.replace("#", "");
+    const element = document.getElementById(id);
+
+    if (element) {
+      const timer = setTimeout(() => {
+        scrollToElement(element);
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, hash]);
+
+  return null;
+};
+
 const MainContent: React.FC<{ 
   portfolioData: PortfolioData; 
   showArrow: boolean; 
   canvasRef: React.RefObject<HTMLCanvasElement | null>; 
   heroImageRef: React.RefObject<HTMLImageElement | null>;
 }> = ({ portfolioData, showArrow, canvasRef, heroImageRef }) => {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        setTimeout(() => {
-          scrollToElement(element);
-        }, 100);
-      }
-    }
-  }, [location]);
-
   return (
     <>
       <Hero 
@@ -182,11 +215,8 @@ const MainContent: React.FC<{
 
       <div id="main-content">
         <Discovery data={portfolioData.discovery} />
-        
         <Skills data={portfolioData.skills} />
-        
         <Journey data={portfolioData.journey} />
-        
         <Contact data={portfolioData.contact} socials={portfolioData.hero.socialLinks} />
       </div>
     </>
@@ -199,12 +229,7 @@ const ProjectsPage: React.FC<{ portfolioData: PortfolioData }> = ({ portfolioDat
   }, []);
 
   return (
-    <div className="pt-28 min-h-screen">
-      <div className="mx-auto max-w-5xl px-4 mb-8">
-        <Link to="/" className="cta-secondary inline-flex items-center gap-2 mb-8 focus-ring">
-          ← Back to Home
-        </Link>
-      </div>
+    <div className="pt-28 pb-20 lg:pt-32 lg:pb-24 min-h-screen">
       <Projects data={portfolioData.projects} />
     </div>
   );
@@ -214,14 +239,12 @@ const AppContent: React.FC = () => {
   useInteractions();
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(FALLBACK_DATA);
   const [activeSection, setActiveSection] = useState("home");
-  
   const [showArrow, setShowArrow] = useState(true);
+  const location = useLocation();
 
-  // Refs for theme transitions
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroImageRef = useRef<HTMLImageElement>(null);
 
-  // Fetch data from the API
   useEffect(() => {
     fetch("/api/portfolio")
       .then((res) => {
@@ -241,11 +264,9 @@ const AppContent: React.FC = () => {
       });
   }, []);
 
-  // Scroll animations and arrow display observers
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     
-    // 1. Intersection observer for hero section to toggle scroll arrow
     const heroEl = document.getElementById("home");
     const heroObserver = new IntersectionObserver(
       ([entry]) => {
@@ -259,7 +280,6 @@ const AppContent: React.FC = () => {
     );
     if (heroEl) heroObserver.observe(heroEl);
 
-    // 2. Intersection observer for scroll reveal fade-ins (one-way for performance)
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -269,20 +289,17 @@ const AppContent: React.FC = () => {
           }
         });
       },
-      {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-      }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
-    // Observe reveal components after short delay to let DOM render
-    const timer = setTimeout(() => {
+    const observeReveals = () => {
       document.querySelectorAll(".reveal").forEach((el) => {
         revealObserver.observe(el);
       });
-    }, 100);
+    };
 
-    // 3. Navigation observer for current active nav link
+    const timer = setTimeout(observeReveals, 200);
+
     const sections = ["discovery", "journey", "contact"].map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     const navObserver = new IntersectionObserver(
       (entries) => {
@@ -291,17 +308,12 @@ const AppContent: React.FC = () => {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
         if (intersecting.length > 0) {
-          setActiveSection((current) =>
-            current === intersecting[0].target.id ? current : intersecting[0].target.id
-          );
+          setActiveSection(intersecting[0].target.id);
         } else if (window.scrollY < 200) {
-          setActiveSection((current) => (current === "home" ? current : "home"));
+          setActiveSection("home");
         }
       },
-      {
-        rootMargin: "-38% 0px -50% 0px",
-        threshold: [0.12, 0.28, 0.5]
-      }
+      { rootMargin: "-38% 0px -50% 0px", threshold: [0.12, 0.28, 0.5] }
     );
 
     sections.forEach(s => navObserver.observe(s));
@@ -312,10 +324,11 @@ const AppContent: React.FC = () => {
       navObserver.disconnect();
       clearTimeout(timer);
     };
-  }, [portfolioData]);
+  }, [portfolioData, location.pathname]);
 
   return (
     <div className="min-h-screen overflow-x-hidden font-sans text-white antialiased">
+      <ScrollToHash />
       <div className="site-bg" aria-hidden="true">
         <div className="bg-orb orb-1"></div>
         <div className="bg-orb orb-2"></div>
@@ -323,11 +336,7 @@ const AppContent: React.FC = () => {
         <div className="bg-orb orb-4"></div>
       </div>
 
-      <Header 
-        activeSection={activeSection} 
-        canvasRef={canvasRef} 
-        heroImageRef={heroImageRef} 
-      />
+      <Header activeSection={activeSection} canvasRef={canvasRef} heroImageRef={heroImageRef} />
 
       <main>
         <Routes>

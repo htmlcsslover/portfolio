@@ -17,11 +17,26 @@ export const Hero: React.FC<HeroProps> = React.memo(
     const { portraitIsDark } = useTheme();
     const [typingText, setTypingText] = useState("");
     const [reducedMotion, setReducedMotion] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
-    // Check prefers-reduced-motion
+    // Check media queries
     useEffect(() => {
-      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setReducedMotion(media.matches);
+      const motionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setReducedMotion(motionMedia.matches);
+
+      const desktopMedia = window.matchMedia("(min-width: 1024px)");
+      setIsDesktop(desktopMedia.matches);
+
+      const motionListener = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+      const desktopListener = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+
+      motionMedia.addEventListener("change", motionListener);
+      desktopMedia.addEventListener("change", desktopListener);
+
+      return () => {
+        motionMedia.removeEventListener("change", motionListener);
+        desktopMedia.removeEventListener("change", desktopListener);
+      };
     }, []);
 
     // Typing Loop Animation
@@ -42,21 +57,19 @@ export const Hero: React.FC<HeroProps> = React.memo(
         if (!deleting) {
           setTypingText(phrase.slice(0, charIndex + 1));
           charIndex++;
-
           if (charIndex === phrase.length) {
             deleting = true;
-            timerId = setTimeout(typeLoop, 1200); // pause at end of typing
+            timerId = setTimeout(typeLoop, 1200);
           } else {
             timerId = setTimeout(typeLoop, 78);
           }
         } else {
           setTypingText(phrase.slice(0, charIndex - 1));
           charIndex--;
-
           if (charIndex === 0) {
             deleting = false;
             phraseIndex = (phraseIndex + 1) % data.typingPhrases.length;
-            timerId = setTimeout(typeLoop, 400); // pause after deleting
+            timerId = setTimeout(typeLoop, 400);
           } else {
             timerId = setTimeout(typeLoop, 42);
           }
@@ -64,11 +77,9 @@ export const Hero: React.FC<HeroProps> = React.memo(
       };
 
       timerId = setTimeout(typeLoop, 500);
-
       return () => clearTimeout(timerId);
     }, [data.typingPhrases, reducedMotion]);
 
-    // Scroll Down Action
     const handleScrollDown = () => {
       const target = document.getElementById("discovery");
       if (target) {
@@ -79,11 +90,11 @@ export const Hero: React.FC<HeroProps> = React.memo(
     return (
       <section
         id="home"
-      className="relative min-h-screen px-4 pb-12 pt-28 sm:px-6 lg:px-8 flex items-center justify-center"
+        className="relative min-h-screen px-5 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 lg:px-8 lg:pt-0 lg:pb-12 flex items-center justify-center"
       >
-        <div className="mx-auto grid max-w-5xl w-full items-center gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mx-auto grid max-w-5xl w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
           {/* Left Side: About details and CTAs */}
-          <article className="hero-glass glass-panel tilt-card reveal relative rounded-2xl p-5 sm:p-6 lg:p-7 flex flex-col justify-between">
+          <article className="hero-glass glass-panel tilt-card reveal relative rounded-2xl p-6 sm:p-8 lg:p-7 flex flex-col justify-between">
             <div className="flex flex-col gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 {data.badges.map((badge, idx) => (
@@ -98,7 +109,7 @@ export const Hero: React.FC<HeroProps> = React.memo(
                 {!reducedMotion && <span className="typing-cursor">|</span>}
               </p>
 
-              <h1 className="font-title text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[0.95] tracking-tight text-neutral-900 dark:text-white">
+              <h1 className="font-title text-[clamp(2.5rem,8vw,4.25rem)] lg:text-[clamp(2.25rem,6.5vw,4.25rem)] font-extrabold leading-[0.95] tracking-tight text-neutral-900 dark:text-white">
                 {data.title.line1} {data.title.line2}
                 <br />
                 <span className="liquid-text">{data.title.highlight}</span>
@@ -111,91 +122,51 @@ export const Hero: React.FC<HeroProps> = React.memo(
               </div>
             </div>
 
-            <div className="action-row glass-panel mt-6 flex w-full flex-wrap items-center justify-evenly gap-4 rounded-xl p-2 sm:gap-6">
-              <a
-                className="cta-primary focus-ring"
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const target = document.getElementById("contact");
-                  if (target) scrollToElement(target);
-                }}
-              >
-                Contact Me
-              </a>
-              <Link
-                to="/projects"
-                className="cta-secondary flex items-center gap-1.5 focus-ring"
-              >
+            <div className="action-row glass-panel mt-8 lg:mt-6 flex w-full flex-wrap items-center justify-evenly gap-4 rounded-xl p-2 sm:gap-6">
+              <Link to="/#contact" className="cta-primary focus-ring">Contact Me</Link>
+              <Link to="/projects" className="cta-secondary flex items-center gap-1.5 focus-ring">
                 Projects <ArrowUpRight size={14} />
               </Link>
-              <a
-                className="cta-secondary focus-ring"
-                href={data.socialLinks.linkedin}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                className="cta-secondary focus-ring"
-                href={data.socialLinks.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub
-              </a>
+              <a className="cta-secondary focus-ring" href={data.socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+              <a className="cta-secondary focus-ring" href={data.socialLinks.github} target="_blank" rel="noreferrer">GitHub</a>
             </div>
           </article>
 
           {/* Right Side: Portrait and Canvas Animation */}
           <aside className="reveal relative mx-auto w-full max-w-[18rem] lg:max-w-[18rem]">
-            <div className="portrait-shell glass-panel relative mx-auto aspect-[0.92] rounded-2xl p-4">
+            <div className="portrait-shell glass-panel relative mx-auto aspect-[0.92] rounded-2xl p-4 sm:p-5 lg:p-4">
               <div className="portrait-media">
-                {/* Profile image with crop values matching native sizing */}
                 <img
                   id="hero-image"
                   ref={heroImageRef}
-                  src={
-                    portraitIsDark
-                      ? "/images/darkMode.png"
-                      : "/images/lightMode.png"
-                  }
-                  data-light-scale="1.335"
-                  data-dark-scale="1.335"
-                  data-light-position="center -25%"
-                  data-dark-position="center -22%"
+                  src={portraitIsDark ? "/images/darkMode.png" : "/images/lightMode.png"}
                   alt="Raphael Portrait"
                   loading="eager"
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    transform: "scale(1.335)",
-                    objectPosition: "center -25%",
-                    transition: "opacity 260ms ease, transform 260ms ease",
+                  className="absolute inset-0 w-full h-full object-cover scale-135 translate-y-4 lg:scale-[1.335] lg:translate-y-0"
+                  style={{ 
+                    objectPosition: isDesktop ? "center -25%" : "center -25%", 
+                    transition: "opacity 260ms ease, transform 260ms ease" 
                   }}
+                  data-light-scale={isDesktop ? "1.335" : undefined}
+                  data-dark-scale={isDesktop ? "1.335" : undefined}
+                  data-light-position={isDesktop ? "center -25%" : undefined}
+                  data-dark-position={isDesktop ? "center -22%" : undefined}
                 />
-
-                {/* Canvas Overlay for preloaded transition frames */}
-                {/* NOTE: Tweak transition zoom/crop here:
-                  - To zoom in/out, change "data-frame-light-scale" and "data-frame-dark-scale" (e.g., "1.335" to zoom in).
-                  - To change crop position, change "data-frame-light-position" and "data-frame-dark-position" (e.g., "center -25%").
-              */}
                 <canvas
                   id="transition-canvas"
                   ref={canvasRef}
-                  data-frame-light-scale="1"
-                  data-frame-dark-scale="1"
-                  data-frame-light-position="center 14.78%"
-                  data-frame-dark-position="center 14.88%"
                   className="absolute inset-0 w-full h-full opacity-0 pointer-events-none object-cover"
                   style={{ visibility: "hidden" }}
+                  data-frame-light-scale={isDesktop ? "1" : undefined}
+                  data-frame-dark-scale={isDesktop ? "1" : undefined}
+                  data-frame-light-position={isDesktop ? "center 14.78%" : undefined}
+                  data-frame-dark-position={isDesktop ? "center 14.88%" : undefined}
                 />
               </div>
               <div className="portrait-shine" aria-hidden="true"></div>
             </div>
 
-            <div className="current-lane-badge glass-panel rounded-xl p-3 text-center">
+            <div className="current-lane-badge glass-panel rounded-xl p-3 text-center mt-6 lg:mt-4">
               <p className="text-[10px] uppercase tracking-[0.3em] text-neutral-500 dark:text-white/50">
                 Current lane
               </p>
@@ -206,7 +177,6 @@ export const Hero: React.FC<HeroProps> = React.memo(
           </aside>
         </div>
 
-        {/* Down arrow triggers section scroll */}
         <button
           id="scroll-arrow"
           className={`scroll-arrow focus-ring ${showArrow ? "" : "hidden-arrow"}`}
@@ -215,16 +185,10 @@ export const Hero: React.FC<HeroProps> = React.memo(
           onClick={handleScrollDown}
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="m6 9 6 6 6-6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </section>
     );
-  },
+  }
 );

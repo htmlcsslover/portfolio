@@ -57,7 +57,9 @@ export interface PortfolioData {
     items: {
       title: string;
       description: string;
+      techStack: string[];
       image: string;
+      screenshots: string[];
       link: string;
     }[];
   };
@@ -66,6 +68,8 @@ export interface PortfolioData {
 export interface Project {
   title: string;
   description: string;
+  techStack: string[];
   image: string;
+  screenshots: string[];
   link: string;
 }
