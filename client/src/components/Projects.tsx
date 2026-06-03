@@ -82,6 +82,7 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
           </Link>
           
           <div className="flex flex-col">
+            {/* Title - Centered Horizontally */}
             <h2 className="section-title text-center text-neutral-900 dark:text-white max-w-3xl mx-auto">
               {data.title}
             </h2>
@@ -247,23 +248,23 @@ export const Projects: React.FC<ProjectsProps> = React.memo(({ data }) => {
       {/* Fullscreen Lightbox */}
       {isLightboxOpen && selectedProject && (
         <div 
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl cursor-zoom-out"
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl cursor-zoom-out"
           onClick={() => setIsLightboxOpen(false)}
         >
-          {/* Close Button: Fixed to TOP LEFT on Desktop, Hidden on Mobile */}
+          {/* Close Button: Absolute to TOP LEFT on Desktop, Hidden on Mobile */}
           <button 
             onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); }}
-            className="fixed top-8 left-8 p-3 glass-panel rounded-full hover:bg-white/10 transition-all z-[210] cursor-pointer hidden md:flex items-center justify-center"
+            className="absolute top-5 left-5 p-3 glass-panel rounded-full hover:bg-white/10 transition-all z-[210] cursor-pointer hidden md:flex items-center justify-center"
             aria-label="Close lightbox"
           >
             <X size={24} className="text-white" />
           </button>
           
-          <div className="w-full h-full flex items-center justify-center p-4">
+          <div className="w-full h-full flex items-center justify-center p-4 pointer-events-none">
             <img 
               src={selectedProject.screenshots[currentIdx]}
               alt="Fullscreen screenshot"
-              className="max-w-full max-h-full object-contain shadow-2xl cursor-default"
+              className="max-w-full max-h-full object-contain shadow-2xl cursor-default pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             />
           </div>
